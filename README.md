@@ -15,7 +15,7 @@
 7. npm i ts-node-dev --save-dev (for run app when developing)
 8. mongodb connection (database connection)
 
-# to run application locally
+# To run application locally
 
 1. npm run build (for build)
 2. npm run start (that can start the project)
