@@ -14,6 +14,7 @@
    npm i @types/cors
 7. npm i ts-node-dev --save-dev (for run app when developing)
 8. mongodb connection (database connection)
+9. npm i zod (zod validator installation)
 
 # To run application locally
 

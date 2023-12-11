@@ -41,5 +41,8 @@ const courseSchema = new Schema<TCourse>({
   provider: { type: String, required: true },
   durationInWeeks: { type: Number, required: true },
   details: { type: detailsSchema, required: true },
-});
-export const courseModel = model<TCourse>("Course", courseSchema);
+} );
+
+export const courseModel = model<TCourse>( "Course", courseSchema );
+
+
