@@ -1,5 +1,6 @@
 import { ErrorRequestHandler } from "express";
 import { TErrorDetails } from "../interface/ErrorInterface";
+import AppError from "../errors/AppError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
@@ -10,6 +11,18 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
       message: "Something went wrong",
     },
   ];
+
+  if ( err instanceof AppError )
+  {
+    message = err.message;
+    statusCode = err?.statusCode;
+    errorDetails = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
+  }
 
   return res.status(statusCode).json({
     success: false,
