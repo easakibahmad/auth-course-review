@@ -9,16 +9,20 @@ import { courseControllers } from "./course.controller";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/course",
   ValidateRequest(createCourseValidationSchema),
   courseControllers.createCourse
 );
 router.put(
-  "/:courseId",
+  "/courses/:courseId",
   ValidateRequest(updateCourseValidationSchema),
   courseControllers.updateCourse
 );
 
-router.get("/:courseId/reviews", courseControllers.getSingleCourseWithReview);
+router.get(
+  "/courses/:courseId/reviews",
+  courseControllers.getSingleCourseWithReview
+);
+router.get("/course/best", courseControllers.getBestCourse);
 
 export const courseRoutes = router;
