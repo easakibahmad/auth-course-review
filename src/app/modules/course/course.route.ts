@@ -1,5 +1,8 @@
 import express from "express";
-import { createCourseValidationSchema, updateCourseValidationSchema } from "./course.validation";
+import {
+  createCourseValidationSchema,
+  updateCourseValidationSchema,
+} from "./course.validation";
 import ValidateRequest from "../../middlewares/ValidateRequest";
 import { courseControllers } from "./course.controller";
 
@@ -15,5 +18,7 @@ router.put(
   ValidateRequest(updateCourseValidationSchema),
   courseControllers.updateCourse
 );
+
+router.get("/:courseId/reviews", courseControllers.getSingleCourseWithReview);
 
 export const courseRoutes = router;

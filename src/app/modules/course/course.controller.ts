@@ -52,7 +52,10 @@ const updateCourse = catchAsync(async (req, res) => {
   ); //get invalid keys
 
   if (invalidKeys.length > 0) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Invalid keys found");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Invalid keys found for updating"
+    );
   }
 
   const result = await courseServices.updateCourseIntoDB(
@@ -68,7 +71,29 @@ const updateCourse = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleCourseWithReview = catchAsync(async (req, res) => {
+  const { courseId } = req.params;
+
+  // check courseId is valid or not
+  const checkCourseExistOrNot = await courseModel.findOne({
+    _id: courseId,
+  });
+
+  if (!checkCourseExistOrNot) {
+    throw new AppError(httpStatus.NOT_FOUND, "Course id is invalid");
+  }
+
+  const result = await courseServices.getSingleCourseWithReviewFromDB(courseId);
+
+  SendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course and Reviews retrieved successfully",
+    data: result,
+  });
+});
 export const courseControllers = {
   createCourse,
   updateCourse,
+  getSingleCourseWithReview,
 };

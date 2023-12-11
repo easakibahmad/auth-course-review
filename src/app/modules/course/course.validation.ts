@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 // creating validation schema
 export const createTagValidationSchema = z.object({
@@ -45,8 +45,11 @@ export const updateDetailsValidationSchema = z.object({
         message:
           "Invalid course level. Must be one of: Beginner, Intermediate, Advanced",
       }
-    ).optional(),
-  description: z.string({ required_error: "Course description is required" }).optional(),
+    )
+    .optional(),
+  description: z
+    .string({ required_error: "Course description is required" })
+    .optional(),
 });
 
 export const updateCourseValidationSchema = z.object({
