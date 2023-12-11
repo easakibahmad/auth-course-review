@@ -12,10 +12,7 @@ const createCourse = catchAsync(async (req, res) => {
     _id: courseData.categoryId,
   });
   if (!checkCategoryExistOrNot) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      "Course id is invalid, course not found!"
-    );
+    throw new AppError(httpStatus.NOT_FOUND, "Category id is invalid");
   }
 
   const result = await courseServices.createCourseIntoDB(courseData);
