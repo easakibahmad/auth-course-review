@@ -140,6 +140,10 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     language,
     provider,
     durationInWeeks,
+    level,
+    tags,
+    startDate,
+    endDate,
   } = query;
 
   const applyFiltering: any = {};
@@ -168,6 +172,21 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   if (durationInWeeks) {
     applyFiltering.durationInWeeks = parseInt(durationInWeeks as string);
+  }
+
+  if (level) {
+    applyFiltering["details.level"] = level;
+  }
+
+  if (tags) {
+  }
+
+  if (startDate) {
+    applyFiltering.startDate = { $gte: startDate as string };
+  }
+
+  if (endDate) {
+    applyFiltering.endDate = { $lte: endDate as string };
   }
 
   let limitAsNumber = parseInt(limit as string);
