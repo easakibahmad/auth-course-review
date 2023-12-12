@@ -8,8 +8,14 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let message = "Something went wrong!";
   let errorDetails: TErrorDetails = [
     {
+      stringValue: "",
+      valueType: "",
+      kind: "",
+      value: "",
       path: "",
-      message: "Something went wrong",
+      reason: "{}",
+      name: "",
+      message: err.message,
     },
   ];
 
@@ -18,15 +24,31 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = err?.statusCode;
     errorDetails = [
       {
+        stringValue: "",
+        valueType: "",
+        kind: "",
+        value: "",
         path: "",
-        message: err?.message,
+        reason: "",
+        name: "AppError",
+        message: err.message,
       },
     ];
   } else if (err?.name === "CastError") {
     const foundedCastError = CastError(err);
+
+    const specificMessageForId =
+      foundedCastError?.errorDetails[0]?.message.match(/"([^"]+)"/);
+
+    const invalidId = specificMessageForId ? specificMessageForId[1] : "";
+
+    err.message = `${invalidId} is not a valid ID!`;
+
     statusCode = foundedCastError?.statusCode;
     message = foundedCastError?.message;
     errorDetails = foundedCastError?.errorDetails;
+    errorDetails[0].value = invalidId;
+    errorDetails[0].stringValue = invalidId;
   }
 
   return res.status(statusCode).json({
