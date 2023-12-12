@@ -15,7 +15,10 @@ const createCourse = catchAsync(async (req, res) => {
   });
 
   if (!checkCategoryExistOrNot) {
-    throw new AppError(httpStatus.NOT_FOUND, "Category id is invalid");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      `${courseData.categoryId} (categoryId) is invalid`
+    );
   }
 
   const result = await courseServices.createCourseIntoDB(courseData);
@@ -38,7 +41,10 @@ const updateCourse = catchAsync(async (req, res) => {
   });
 
   if (!checkCourseExistOrNot) {
-    throw new AppError(httpStatus.NOT_FOUND, "Course id is invalid");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      `${courseId} (courseId) is invalid`
+    );
   }
 
   const courseDataForUpdate = req.body;
@@ -80,7 +86,10 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
   });
 
   if (!checkCourseExistOrNot) {
-    throw new AppError(httpStatus.NOT_FOUND, "Course id is invalid");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      `${courseId} (courseId) is invalid`
+    );
   }
 
   const result = await courseServices.getSingleCourseWithReviewFromDB(courseId);

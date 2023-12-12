@@ -4,6 +4,7 @@ import AppError from "../errors/AppError";
 import CastError from "../errors/CastError";
 import ZodErrorHandling from "../errors/ZodErrorHandling";
 import { ZodError } from "zod";
+import DuplicateError from "../errors/DuplicateError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
@@ -51,6 +52,20 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = foundedZodError?.statusCode;
     message = foundedZodError?.message;
     errorDetails = foundedZodError?.errorDetails;
+  } else if (err?.code === 11000) {
+    const foundedDuplicateError = DuplicateError(err);
+
+    const match = err.message.match(/dup key: { (\w+): "([^"]+)" }/);
+
+    if (match) {
+      const field = match[1];
+      const value = match[2];
+      errorMessageGlobal = `${field} is not assignable with value '${value}'`;
+    }
+
+    statusCode = foundedDuplicateError?.statusCode;
+    message = foundedDuplicateError?.message;
+    errorDetails = foundedDuplicateError?.errorDetails;
   } else if (err instanceof AppError) {
     message = err.message;
     statusCode = err?.statusCode;
