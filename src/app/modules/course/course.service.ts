@@ -146,12 +146,14 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     endDate,
     minPrice,
     maxPrice,
+    sortOrder,
   } = query;
 
-  const applyFiltering: any = {};
-  const applySort: any = {};
+  const applyFiltering: any = {}; //for filtering
 
-  //specified sort values
+  const applySort: any = {}; //for sorting
+
+  //specified sortBy values
   const SortByValues = {
     TITLE: "title",
     PRICE: "price",
@@ -161,13 +163,32 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     DURATION: "duration",
   };
 
-  //sorting in ascending order
-  if (Object.values(SortByValues).includes(sortBy as string)) {
-    applySort[sortBy as string] = 1;
+  //specified sortOrder values
+  const AscOrDscOrder = {
+    ASC: "asc",
+    DSC: "desc",
+  };
 
-    if (sortBy === "duration") {
+  //for sorting
+  if (Object.values(SortByValues).includes(sortBy as string)) {
+    // check sortOrder is in specified values
+    if (Object.values(AscOrDscOrder).includes(sortOrder as string)) {
+      if (sortBy === "duration") {
+        sortOrder === "asc"
+          ? (applySort.durationInWeeks = 1)
+          : (applySort.durationInWeeks = -1);
+      }
+
+      sortOrder === "asc"
+        ? (applySort[sortBy as string] = 1)
+        : (applySort[sortBy as string] = -1);
+    }
+
+    //set default sorting as ascending order when sortOrder is not in query
+    if (sortBy == "duration") {
       applySort.durationInWeeks = 1;
     }
+    applySort[sortBy as string] = 1;
   }
 
   //filtering
