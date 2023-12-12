@@ -133,13 +133,45 @@ const getBestCourseFromDB = async () => {
 };
 
 const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
-  const { page = 1, limit = 4 } = query;
+  const {
+    page = 1,
+    limit = 4,
+    sortBy,
+    language,
+    provider,
+    durationInWeeks,
+  } = query;
 
-  const applyFiltering = {};
+  const applyFiltering: any = {};
+  const applySort = {};
+
+  const SortByValues = {
+    TITLE: "title",
+    PRICE: "price",
+    START_DATE: "startDate",
+    END_DATE: "endDate",
+    LANGUAGE: "language",
+    DURATION: "duration",
+  };
+
+  if (Object.values(SortByValues).includes(sortBy as string)) {
+    console.log(console.log(sortBy));
+  }
+
+  if (language) {
+    applyFiltering.language = language;
+  }
+
+  if (provider) {
+    applyFiltering.provider = provider;
+  }
+
+  if (durationInWeeks) {
+    applyFiltering.durationInWeeks = parseInt(durationInWeeks as string);
+  }
 
   let limitAsNumber = parseInt(limit as string);
   let pageAsNumber = parseInt(page as string);
-
   let skippedDataWithPageAndLimit = (pageAsNumber - 1) * limitAsNumber;
 
   const retrievedCourseByFiltering = await courseModel
