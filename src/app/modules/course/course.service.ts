@@ -144,6 +144,8 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     tags,
     startDate,
     endDate,
+    minPrice,
+    maxPrice,
   } = query;
 
   const applyFiltering: any = {};
@@ -179,6 +181,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   }
 
   if (tags) {
+    applyFiltering["tags.name"] = tags;
   }
 
   if (startDate) {
@@ -187,6 +190,14 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   if (endDate) {
     applyFiltering.endDate = { $lte: endDate as string };
+  }
+
+  if (minPrice) {
+    applyFiltering.price = { $gte: parseFloat(minPrice as string) };
+  }
+
+  if (maxPrice) {
+    applyFiltering.price = { $lte: parseFloat(maxPrice as string) };
   }
 
   let limitAsNumber = parseInt(limit as string);
