@@ -135,7 +135,7 @@ const getBestCourseFromDB = async () => {
 const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   const {
     page = 1,
-    limit = 4,
+    limit = 3, //default limit value is 3
     sortBy,
     language,
     provider,
@@ -149,8 +149,9 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   } = query;
 
   const applyFiltering: any = {};
-  const applySort = {};
+  const applySort: any = {};
 
+  //specified sort values
   const SortByValues = {
     TITLE: "title",
     PRICE: "price",
@@ -160,10 +161,16 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     DURATION: "duration",
   };
 
+  //sorting in ascending order
   if (Object.values(SortByValues).includes(sortBy as string)) {
-    console.log(console.log(sortBy));
+    applySort[sortBy as string] = 1;
+
+    if (sortBy === "duration") {
+      applySort.durationInWeeks = 1;
+    }
   }
 
+  //filtering
   if (language) {
     applyFiltering.language = language;
   }
@@ -202,11 +209,12 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   let limitAsNumber = parseInt(limit as string);
   let pageAsNumber = parseInt(page as string);
-  let skippedDataWithPageAndLimit = (pageAsNumber - 1) * limitAsNumber;
+  let dataWithPageAndLimit = (pageAsNumber - 1) * limitAsNumber;
 
   const retrievedCourseByFiltering = await courseModel
     .find(applyFiltering)
-    .skip(skippedDataWithPageAndLimit)
+    .sort(applySort)
+    .skip(dataWithPageAndLimit)
     .limit(limitAsNumber);
 
   if (!retrievedCourseByFiltering) {
@@ -218,7 +226,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   const totalCourses = await courseModel.find({});
 
-  const total = totalCourses?.length;
+  const total = totalCourses?.length; // calculated total length where query applied for meta property
 
   return { result: retrievedCourseByFiltering, page, limit, total };
 };
