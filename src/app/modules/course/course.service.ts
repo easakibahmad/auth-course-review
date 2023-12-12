@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
 import { reviewModel } from "../review/review.model";
 import { TCourse } from "./course.interface";
 import { courseModel } from "./course.model";
@@ -31,7 +33,7 @@ const updateCourseIntoDB = async (
   const tagsFromCourse = findTags?.tags;
 
   if (Array.isArray(tagsFromCourse) && Array.isArray(tags)) {
-    //map through tags and check tag.name is not matched with tagFromCourse.name from 'tagsFromCourse', and tag.isDeleted is false then push this into 'tagsFromCourse'
+    //filter through tags and check tag.name is not matched with tagFromCourse.name from 'tagsFromCourse', and tag.isDeleted is false then push this into 'tagsFromCourse'
     const newTags = tags
       .filter(
         (tag) =>
@@ -105,7 +107,7 @@ const getBestCourseFromDB = async () => {
       reviewCount = reviews.length; // calculate review count
     }
 
-    // i use this formula to calculate weight for each course to determine which one is best
+    // I use this formula to calculate weight for each course to determine which one is best
     const courseWeight = averageRating * 0.8 + reviewCount * 0.2;
 
     if (courseWeight > bestWeightedCourse.courseWeight) {
@@ -123,7 +125,6 @@ const getBestCourseFromDB = async () => {
     _id: bestWeightedCourse.courseId,
   });
 
-  ///
   return {
     course: bestCourseFound,
     averageRating: bestWeightedCourse.averageRating,
@@ -131,9 +132,35 @@ const getBestCourseFromDB = async () => {
   };
 };
 
+const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
+  const { page = 1, limit = 4 } = query;
+
+  const applyFiltering = {};
+
+  let limitAsNumber = parseInt(limit as string);
+  let pageAsNumber = parseInt(page as string);
+
+  let skippedDataWithPageAndLimit = (pageAsNumber - 1) * limitAsNumber;
+
+  const retrievedCourseByFiltering = await courseModel
+    .find(applyFiltering)
+    .skip(skippedDataWithPageAndLimit)
+    .limit(limitAsNumber);
+
+  if (!retrievedCourseByFiltering) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "query filtering failed to load courses data!"
+    );
+  }
+
+  return retrievedCourseByFiltering;
+};
+
 export const courseServices = {
   createCourseIntoDB,
   updateCourseIntoDB,
   getSingleCourseWithReviewFromDB,
   getBestCourseFromDB,
+  getAllCoursesFromDB,
 };

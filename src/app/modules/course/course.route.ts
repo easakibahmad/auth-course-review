@@ -24,5 +24,6 @@ router.get(
   courseControllers.getSingleCourseWithReview
 );
 router.get("/course/best", courseControllers.getBestCourse);
+router.get("/courses", courseControllers.getAllCourses);
 
 export const courseRoutes = router;

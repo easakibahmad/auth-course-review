@@ -30,7 +30,7 @@
     "start:prod": "node ./dist/server.js",  
    }
 
-# vercel deploy
+# Vercel deploy
 
 1. npm i -g vercel (install vercel)
 2. locally build (npm run build)

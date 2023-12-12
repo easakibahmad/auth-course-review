@@ -6,6 +6,7 @@ import { courseServices } from "./course.service";
 import httpStatus from "http-status";
 import { updateCourseValidationSchema } from "./course.validation";
 import { courseModel } from "./course.model";
+import { RequestHandler } from "express";
 
 const createCourse = catchAsync(async (req, res) => {
   const courseData = req.body;
@@ -211,9 +212,22 @@ const getBestCourse = catchAsync(async (req, res) => {
     },
   });
 });
+
+// get courses
+const getAllCourses = catchAsync(async (req, res) => {
+  const result = await courseServices.getAllCoursesFromDB(req.query);
+
+  SendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Courses retrieved successfully",
+    data: result,
+  });
+});
 export const courseControllers = {
   createCourse,
   updateCourse,
   getSingleCourseWithReview,
   getBestCourse,
+  getAllCourses,
 };
