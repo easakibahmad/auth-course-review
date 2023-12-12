@@ -46,9 +46,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
       .map((issue) => `${issue.path.join(" ")} is required`)
       .join(" | ");
 
-    // console.log(err.message);
     errorMessageGlobal = errors;
-    console.log();
 
     statusCode = foundedZodError?.statusCode;
     message = foundedZodError?.message;

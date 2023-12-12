@@ -1,7 +1,4 @@
-import {
-  TError,
-  TErrorDetails,
-} from "../interface/ErrorInterface";
+import { TError, TErrorDetails } from "../interface/ErrorInterface";
 
 const DuplicateError = (err: any): TError => {
   const match = err.message.match(/"([^"]*)"/);
@@ -20,7 +17,7 @@ const DuplicateError = (err: any): TError => {
 
   return {
     statusCode,
-    message: "Duplicate key",
+    message: "Duplicate Entry",
     errorDetails,
   };
 };

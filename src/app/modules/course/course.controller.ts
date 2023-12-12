@@ -23,11 +23,33 @@ const createCourse = catchAsync(async (req, res) => {
 
   const result = await courseServices.createCourseIntoDB(courseData);
 
+  //this will be the response when course created
+  const resultForResponse = {
+    _id: result._id,
+    title: result.title,
+    instructor: result.instructor,
+    categoryId: result.categoryId,
+    price: result.price,
+    tags: result.tags.map((tag) => ({
+      name: tag.name,
+      isDeleted: tag.isDeleted,
+    })),
+    startDate: result.startDate,
+    endDate: result.endDate,
+    language: result.language,
+    provider: result.provider,
+    durationInWeeks: result.durationInWeeks,
+    details: {
+      level: result.details.level,
+      description: result.details.description,
+    },
+  };
+
   SendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
     message: "Course created successfully",
-    data: result,
+    data: resultForResponse,
   });
 });
 
