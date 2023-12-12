@@ -25,7 +25,35 @@ const updateCourseIntoDB = async (
     ...remainingCourseData,
   };
 
-  //dynamically array element updating remained
+  const findTags = await courseModel.findById(courseId);
+
+  //retrieve tags
+  const tagsFromCourse = findTags?.tags;
+
+  if (Array.isArray(tagsFromCourse) && Array.isArray(tags)) {
+    //map through tags and check tag.name is not matched with tagFromCourse.name from 'tagsFromCourse', and tag.isDeleted is false then push this into 'tagsFromCourse'
+    const newTags = tags
+      .filter(
+        (tag) =>
+          !tagsFromCourse?.some(
+            (existingTag) => existingTag.name === tag.name && !tag.isDeleted
+          )
+      )
+      .filter((tag) => !tag.isDeleted);
+
+    tagsFromCourse?.push(...newTags);
+
+    //map through tags and check tag.name is match with tagFromCourse.name from 'tagsFromCourse', and tag.isDeleted is true then delete this from 'tagsFromCourse'
+    const updatedTags = tagsFromCourse.map((tagFromCourse) => {
+      const matchingTag = tags.find((tag) => tag.name === tagFromCourse.name);
+
+      if (matchingTag && matchingTag.isDeleted) {
+        return null;
+      }
+      return tagFromCourse;
+    });
+    updatedData.tags = updatedTags.filter((tag) => tag !== null);
+  }
 
   if (details && Object.keys(details).length) {
     for (const [key, value] of Object.entries(details)) {
