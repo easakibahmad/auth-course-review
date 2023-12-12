@@ -2,6 +2,8 @@ import { ErrorRequestHandler } from "express";
 import { TErrorDetails } from "../interface/ErrorInterface";
 import AppError from "../errors/AppError";
 import CastError from "../errors/CastError";
+import ZodErrorHandling from "../errors/ZodErrorHandling";
+import { ZodError } from "zod";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
@@ -19,22 +21,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     },
   ];
 
-  if (err instanceof AppError) {
-    message = err.message;
-    statusCode = err?.statusCode;
-    errorDetails = [
-      {
-        stringValue: "",
-        valueType: "",
-        kind: "",
-        value: "",
-        path: "",
-        reason: "",
-        name: "AppError",
-        message: err.message,
-      },
-    ];
-  } else if (err?.name === "CastError") {
+   if (err?.name === "CastError") {
     const foundedCastError = CastError(err);
 
     const specificMessageForId =
@@ -50,6 +37,27 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errorDetails[0].value = invalidId;
     errorDetails[0].stringValue = invalidId;
   }
+  else if (err instanceof ZodError) {
+    const foundedZodError = ZodErrorHandling(err);
+    statusCode = foundedZodError?.statusCode;
+    message = foundedZodError?.message;
+    errorDetails = foundedZodError?.errorDetails;
+  } else if (err instanceof AppError) {
+    message = err.message;
+    statusCode = err?.statusCode;
+    errorDetails = [
+      {
+        stringValue: "",
+        valueType: "",
+        kind: "",
+        value: "",
+        path: "",
+        reason: "",
+        name: "AppError",
+        message: err.message,
+      },
+    ];
+  } 
 
   return res.status(statusCode).json({
     success: false,
