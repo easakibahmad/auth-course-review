@@ -5,7 +5,10 @@ import {
 } from "../interface/ErrorInterface";
 
 const ZodErrorHandling = (err: ZodError): TGenericErrorResponse => {
-  const errorDetails: TErrorDetails | any = { issues: err.issues };
+  const errorDetails: TErrorDetails | any = {
+    issues: err.issues,
+    name: "ZodError",
+  };
 
   const statusCode = 400;
 

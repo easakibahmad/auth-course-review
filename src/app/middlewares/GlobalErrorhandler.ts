@@ -8,6 +8,7 @@ import { ZodError } from "zod";
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
   let message = "Something went wrong!";
+  let errorMessageGlobal = err.message;
   let errorDetails: TErrorDetails = [
     {
       stringValue: "",
@@ -21,7 +22,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     },
   ];
 
-   if (err?.name === "CastError") {
+  if (err?.name === "CastError") {
     const foundedCastError = CastError(err);
 
     const specificMessageForId =
@@ -29,16 +30,24 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
     const invalidId = specificMessageForId ? specificMessageForId[1] : "";
 
-    err.message = `${invalidId} is not a valid ID!`;
+    errorMessageGlobal = `${invalidId} is not a valid ID!`;
 
     statusCode = foundedCastError?.statusCode;
     message = foundedCastError?.message;
     errorDetails = foundedCastError?.errorDetails;
     errorDetails[0].value = invalidId;
     errorDetails[0].stringValue = invalidId;
-  }
-  else if (err instanceof ZodError) {
+  } else if (err instanceof ZodError) {
     const foundedZodError = ZodErrorHandling(err);
+
+    const errors = err.issues
+      .map((issue) => `${issue.path.join(" ")} is required`)
+      .join(" | ");
+
+    // console.log(err.message);
+    errorMessageGlobal = errors;
+    console.log();
+
     statusCode = foundedZodError?.statusCode;
     message = foundedZodError?.message;
     errorDetails = foundedZodError?.errorDetails;
@@ -57,12 +66,12 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
         message: err.message,
       },
     ];
-  } 
+  }
 
   return res.status(statusCode).json({
     success: false,
     message,
-    errorMessage: err.message,
+    errorMessage: errorMessageGlobal ? errorMessageGlobal : err.message,
     errorDetails,
     stack: err?.stack || null,
   });
