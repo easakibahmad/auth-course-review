@@ -29,3 +29,15 @@
     "start": "node ./dist/server.js",  
     "start:prod": "node ./dist/server.js",  
    }
+
+# vercel deploy
+
+1. npm i -g vercel (install vercel)
+2. locally build (npm run build)
+3. create vercel.json file in root directory
+4. vercel login (run this command in terminal)
+5. vercel (run this command in terminal and answer carefully the questions)
+6. set env variables
+7. after app modification(run below commands in terminal)  
+   npm run build  
+   vercel --prod
