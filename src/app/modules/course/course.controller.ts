@@ -91,11 +91,33 @@ const updateCourse = catchAsync(async (req, res) => {
     courseDataForUpdate
   );
 
+  // response data after updating
+  const resultForResponse = {
+    _id: result?._id,
+    title: result?.title,
+    instructor: result?.instructor,
+    categoryId: result?.categoryId,
+    price: result?.price,
+    tags: result?.tags.map((tag) => ({
+      name: tag.name,
+      isDeleted: tag.isDeleted,
+    })),
+    startDate: result?.startDate,
+    endDate: result?.endDate,
+    language: result?.language,
+    provider: result?.provider,
+    durationInWeeks: result?.durationInWeeks,
+    details: {
+      level: result?.details.level,
+      description: result?.details.description,
+    },
+  };
+
   SendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Course updated successfully",
-    data: result,
+    data: resultForResponse,
   });
 });
 
@@ -116,11 +138,39 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
 
   const result = await courseServices.getSingleCourseWithReviewFromDB(courseId);
 
+  //reviews data
+  const resultForReviewResponse = result?.reviews.map((review) => ({
+    courseId: review.courseId,
+    rating: review.rating,
+    review: review.review,
+  }));
+  // course data
+  const resultForCourseResponse = {
+    _id: result?.course?._id,
+    title: result?.course?.title,
+    instructor: result?.course?.instructor,
+    categoryId: result?.course?.categoryId,
+    price: result?.course?.price,
+    tags: result?.course?.tags.map((tag) => ({
+      name: tag.name,
+      isDeleted: tag.isDeleted,
+    })),
+    startDate: result?.course?.startDate,
+    endDate: result?.course?.endDate,
+    language: result?.course?.language,
+    provider: result?.course?.provider,
+    durationInWeeks: result?.course?.durationInWeeks,
+    details: {
+      level: result?.course?.details.level,
+      description: result?.course?.details.description,
+    },
+  };
+
   SendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Course and Reviews retrieved successfully",
-    data: result,
+    data: { course: resultForCourseResponse, reviews: resultForReviewResponse },
   });
 });
 
