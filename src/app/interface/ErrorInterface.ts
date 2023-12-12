@@ -9,7 +9,7 @@ export type TErrorDetails = {
   message: string;
 }[];
 
-export type TGenericErrorResponse = {
+export type TError = {
   statusCode: number;
   message: string;
   errorDetails: TErrorDetails ;

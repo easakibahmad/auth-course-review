@@ -1,10 +1,7 @@
 import { ZodError, ZodIssue } from "zod";
-import {
-  TErrorDetails,
-  TGenericErrorResponse,
-} from "../interface/ErrorInterface";
+import { TError, TErrorDetails } from "../interface/ErrorInterface";
 
-const ZodErrorHandling = (err: ZodError): TGenericErrorResponse => {
+const ZodErrorHandling = (err: ZodError): TError => {
   const errorDetails: TErrorDetails | any = {
     issues: err.issues,
     name: "ZodError",

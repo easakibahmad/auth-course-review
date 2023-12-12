@@ -5,6 +5,7 @@ import CastError from "../errors/CastError";
 import ZodErrorHandling from "../errors/ZodErrorHandling";
 import { ZodError } from "zod";
 import DuplicateError from "../errors/DuplicateError";
+import ValidationError from "../errors/ValidationError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
@@ -66,6 +67,11 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = foundedDuplicateError?.statusCode;
     message = foundedDuplicateError?.message;
     errorDetails = foundedDuplicateError?.errorDetails;
+  } else if (err?.name === "ValidationError") {
+    const foundedValidationError = ValidationError(err);
+    statusCode = foundedValidationError?.statusCode;
+    message = foundedValidationError?.message;
+    errorDetails = foundedValidationError?.errorDetails;
   } else if (err instanceof AppError) {
     message = err.message;
     statusCode = err?.statusCode;

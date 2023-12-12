@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import {
+  TError,
   TErrorDetails,
-  TGenericErrorResponse,
 } from "../interface/ErrorInterface";
 
-const CastError = (err: mongoose.Error.CastError): TGenericErrorResponse => {
+const CastError = (err: mongoose.Error.CastError): TError => {
   const errorDetails: TErrorDetails = [
     {
       stringValue: "",
