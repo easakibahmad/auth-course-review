@@ -71,7 +71,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     message = foundedValidationError?.message;
     errorDetails = foundedValidationError?.errorDetails;
   } else if (err instanceof AppError) {
-    message = err.message;
+    message = "App Error";
     statusCode = err?.statusCode;
     errorDetails = [
       {

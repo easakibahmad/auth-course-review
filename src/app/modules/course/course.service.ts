@@ -1,4 +1,3 @@
-import { string } from "zod";
 import { reviewModel } from "../review/review.model";
 import { TCourse } from "./course.interface";
 import { courseModel } from "./course.model";
