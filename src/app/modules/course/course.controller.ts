@@ -217,11 +217,42 @@ const getBestCourse = catchAsync(async (req, res) => {
 const getAllCourses = catchAsync(async (req, res) => {
   const result = await courseServices.getAllCoursesFromDB(req.query);
 
+  const resultForResponse= result.result.map((data) => {
+    const course = {
+      _id: data._id,
+      title: data?.title,
+      instructor: data.instructor,
+      categoryId: data.categoryId,
+      price: data.price,
+      tags: data.tags.map((tag) => ({
+        name: tag.name,
+        isDeleted: tag.isDeleted,
+      })),
+      startDate: data.startDate,
+      endDate: data.endDate,
+      language: data.language,
+      provider: data.provider,
+      durationInWeeks: data.durationInWeeks,
+      details: {
+        level: data.details.level,
+        description: data.details.description,
+      },
+    };
+    return course;
+  });
+
+  const metaData = {
+    page: result.page,
+    limit: result.limit,
+    total: result.total,
+  };
+
   SendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "Courses retrieved successfully",
-    data: result,
+    meta: metaData,
+    data: resultForResponse,
   });
 });
 export const courseControllers = {

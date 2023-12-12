@@ -154,7 +154,11 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     );
   }
 
-  return retrievedCourseByFiltering;
+  const totalCourses = await courseModel.find({});
+
+  const total = totalCourses?.length;
+
+  return { result: retrievedCourseByFiltering, page, limit, total };
 };
 
 export const courseServices = {
