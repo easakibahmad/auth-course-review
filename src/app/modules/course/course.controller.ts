@@ -178,11 +178,37 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
 const getBestCourse = catchAsync(async (req, res) => {
   const result = await courseServices.getBestCourseFromDB();
 
+  // course data
+  const resultForCourseResponse = {
+    _id: result?.course?._id,
+    title: result?.course?.title,
+    instructor: result?.course?.instructor,
+    categoryId: result?.course?.categoryId,
+    price: result?.course?.price,
+    tags: result?.course?.tags.map((tag) => ({
+      name: tag.name,
+      isDeleted: tag.isDeleted,
+    })),
+    startDate: result?.course?.startDate,
+    endDate: result?.course?.endDate,
+    language: result?.course?.language,
+    provider: result?.course?.provider,
+    durationInWeeks: result?.course?.durationInWeeks,
+    details: {
+      level: result?.course?.details.level,
+      description: result?.course?.details.description,
+    },
+  };
+
   SendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Best course retrieved successfully",
-    data: result,
+    data: {
+      course: resultForCourseResponse,
+      averageRating: result.averageRating,
+      reviewCount: result.reviewCount,
+    },
   });
 });
 export const courseControllers = {
