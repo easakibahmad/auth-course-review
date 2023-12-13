@@ -241,8 +241,8 @@ const getAllCourses = catchAsync(async (req, res) => {
   });
 
   const metaData = {
-    page: result.page,
-    limit: result.limit,
+    page: result.pageAsNumber,
+    limit: result.limitAsNumber,
     total: result.total,
   };
 

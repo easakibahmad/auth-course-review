@@ -138,7 +138,7 @@ const getBestCourseFromDB = async () => {
 const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   const {
     page = 1,
-    limit = 3, //default limit value is 3
+    limit = 10, //default limit value is 10
     sortBy,
     language,
     provider,
@@ -163,7 +163,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     START_DATE: "startDate",
     END_DATE: "endDate",
     LANGUAGE: "language",
-    DURATION: "duration",
+    DURATION: "durationInWeeks",
   };
 
   //specified sortOrder values
@@ -176,22 +176,15 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   if (Object.values(SortByValues).includes(sortBy as string)) {
     // check sortOrder is in specified values
     if (Object.values(AscOrDscOrder).includes(sortOrder as string)) {
-      if (sortBy === "duration") {
-        sortOrder === "asc"
-          ? (applySort.durationInWeeks = 1)
-          : (applySort.durationInWeeks = -1);
-      }
-
       sortOrder === "asc"
         ? (applySort[sortBy as string] = 1)
         : (applySort[sortBy as string] = -1);
     }
 
     //set default sorting as ascending order when sortOrder is not in query
-    if (sortBy == "duration") {
-      applySort.durationInWeeks = 1;
+    else {
+      applySort[sortBy as string] = 1;
     }
-    applySort[sortBy as string] = 1;
   }
 
   //filtering
@@ -215,6 +208,11 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     applyFiltering["tags.name"] = tags;
   }
 
+  if (startDate && endDate) {
+    applyFiltering.startDate = { $gte: startDate as string };
+    applyFiltering.endDate = { $lte: endDate as string };
+  }
+
   if (startDate) {
     applyFiltering.startDate = { $gte: startDate as string };
   }
@@ -229,6 +227,13 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   if (maxPrice) {
     applyFiltering.price = { $lte: parseFloat(maxPrice as string) };
+  }
+
+  if (minPrice && maxPrice) {
+    applyFiltering.price = {
+      $gte: parseFloat(minPrice as string),
+      $lte: parseFloat(maxPrice as string),
+    };
   }
 
   let limitAsNumber = parseInt(limit as string);
@@ -252,7 +257,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   const total = totalCourses?.length; // calculated total length where query applied. To set as a meta property(total)
 
-  return { result: retrievedCourseByFiltering, page, limit, total };
+  return { result: retrievedCourseByFiltering, pageAsNumber, limitAsNumber, total };
 };
 
 export const courseServices = {
