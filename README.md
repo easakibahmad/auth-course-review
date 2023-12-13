@@ -15,6 +15,7 @@
 7. npm i ts-node-dev --save-dev (for run app when developing)
 8. mongodb connection (database connection)
 9. npm i zod (zod validator installation)
+10. npm i http-status (for http-status code)
 
 # To run application locally
 
@@ -29,6 +30,51 @@
     "start": "node ./dist/server.js",  
     "start:prod": "node ./dist/server.js",  
    }
+
+# API Endpoints:
+
+1. Endpoint: /api/course  
+   Method: POST  
+   for creating a Course
+2. Endpoint: /api/courses  
+   Method: GET  
+   Get Paginated and Filtered Courses by utilizing query parameters
+3. Endpoint: /api/categories  
+   Method: POST  
+   for creating a Category
+4. Endpoint: /api/categories  
+   Method: GET  
+   Get All Categories
+5. Endpoint: /api/reviews  
+   Method: POST  
+   for creating a Review
+6. Endpoint: /api/courses/:courseId  
+   Method: PUT  
+   Update a Course (Partial Update with Dynamic Update)
+7. Endpoint: /api/courses/:courseId/reviews  
+   Method: GET  
+   Get Course by ID with Reviews
+8. Endpoint: /api/course/best  
+   Method: GET  
+   Get the Best Course Based on Average Review (Rating)
+
+# Error handling
+
+1. Implemented CastError, DuplicateError, ValidationError, ZodValidationError separately
+2. Custom AppError handler created
+3. Also created global error handler
+4. NotFoundRoute implemented
+5. For validating request created ValidateRequest.ts file
+
+# Utils
+
+1. CatchAsync.ts file created for reduce repeated try-catch block as a RequestHandler
+2. Implemented SendResponse for each api
+
+# Routes
+
+1. course routes used directly in app.ts file
+2. others routes (review, category) are customized inside index.ts file in routes folder
 
 # Vercel deploy
 
