@@ -6,6 +6,7 @@ import { courseModel } from "./course.model";
 import { CalculateWeekDifference } from "./course.utils";
 
 const createCourseIntoDB = async (payload: TCourse) => {
+  //calculate week difference using utils function CalculateWeekDifference
   payload.durationInWeeks = CalculateWeekDifference(
     payload.startDate,
     payload.endDate
@@ -247,7 +248,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   const totalCourses = await courseModel.find({});
 
-  const total = totalCourses?.length; // calculated total length where query applied for meta property
+  const total = totalCourses?.length; // calculated total length where query applied. To set as a meta property(total)
 
   return { result: retrievedCourseByFiltering, page, limit, total };
 };

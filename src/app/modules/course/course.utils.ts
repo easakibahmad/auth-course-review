@@ -26,11 +26,13 @@ export function CalculateWeekDifference(
   let monthDifference = endParsed.month - startParsed.month;
   let dayDifference = endParsed.day - startParsed.day;
 
+  // if month difference become negative
   if (monthDifference < 0) {
     yearDifference -= 1;
     monthDifference += 12;
   }
 
+  // if day difference become negative
   if (dayDifference < 0) {
     monthDifference -= 1;
 
@@ -39,6 +41,7 @@ export function CalculateWeekDifference(
     dayDifference += daysInPreviousMonth;
   }
 
+  //finally calculate weeks difference
   const weeksDifference = Math.ceil(
     (yearDifference * 365 + monthDifference * 30 + dayDifference) / 7
   );
