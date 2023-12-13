@@ -6,7 +6,6 @@ import { courseServices } from "./course.service";
 import httpStatus from "http-status";
 import { updateCourseValidationSchema } from "./course.validation";
 import { courseModel } from "./course.model";
-import { RequestHandler } from "express";
 
 const createCourse = catchAsync(async (req, res) => {
   const courseData = req.body;
@@ -217,7 +216,7 @@ const getBestCourse = catchAsync(async (req, res) => {
 const getAllCourses = catchAsync(async (req, res) => {
   const result = await courseServices.getAllCoursesFromDB(req.query);
 
-  const resultForResponse= result.result.map((data) => {
+  const resultForResponse = result.result.map((data) => {
     const course = {
       _id: data._id,
       title: data?.title,

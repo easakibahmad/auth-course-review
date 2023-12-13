@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { courseRoutes } from "../modules/course/course.route";
 import { categoriesRoutes } from "../modules/category/category.route";
 import { reviewRoutes } from "../modules/review/review.route";
 

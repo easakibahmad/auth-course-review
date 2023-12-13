@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
 import { TErrorDetails } from "../interface/ErrorInterface";
 import AppError from "../errors/AppError";

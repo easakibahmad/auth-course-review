@@ -16,6 +16,7 @@
 8. mongodb connection (database connection)
 9. npm i zod (zod validator installation)
 10. npm i http-status (for http-status code)
+11. eslint installation
 
 # To run application locally
 

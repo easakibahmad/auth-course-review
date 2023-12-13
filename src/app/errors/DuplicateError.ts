@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TError, TErrorDetails } from "../interface/ErrorInterface";
 
 const DuplicateError = (err: any): TError => {
