@@ -148,6 +148,7 @@ const getBestCourseFromDB = async () => {
 };
 
 const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
+  // get query params
   const {
     page = 1,
     limit = 10, //default limit value is 10
@@ -248,6 +249,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     };
   }
 
+  // limit and page number for pagination
   let limitAsNumber = parseInt(limit as string);
   let pageAsNumber = parseInt(page as string);
   let dataWithPageAndLimit = (pageAsNumber - 1) * limitAsNumber;

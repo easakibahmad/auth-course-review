@@ -254,6 +254,7 @@ const getBestCourse = catchAsync(async (req, res) => {
 const getAllCourses = catchAsync(async (req, res) => {
   const result = await courseServices.getAllCoursesFromDB(req.query);
 
+  // response data format
   const resultForResponse = result.result.map((data: any) => {
     const course = {
       _id: data._id,
@@ -286,6 +287,7 @@ const getAllCourses = catchAsync(async (req, res) => {
     return course;
   });
 
+  // meta data for response
   const metaData = {
     page: result.pageAsNumber,
     limit: result.limitAsNumber,
