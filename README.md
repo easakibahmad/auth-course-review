@@ -1,4 +1,4 @@
-# l2b2a3-course-review-easakibahmad
+# l2b2a4-course-review-with-auth-easakibahmad
 
 # Project setup
 
@@ -17,6 +17,10 @@
 9. npm i zod (zod validator installation)
 10. npm i http-status (for http-status code)
 11. eslint installation
+12. npm i bcrypt (bcrypt for password hashing)  
+    npm i @types/bcrypt
+13. npm i jsonwebtoken (jwt token)  
+    npm i @types/jsonwebtoken
 
 # To run application locally
 
