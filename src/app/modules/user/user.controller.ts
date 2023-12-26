@@ -6,7 +6,7 @@ import { createUserValidationSchema } from "./user.validation";
 import { UserServices } from "./user.service";
 
 const createUser = catchAsync(async (req, res) => {
-  const userData = req.body; //user data from body
+  const userData = req.body; //user data from request body
 
   const userDataKeys = Object.keys(userData); // check updated data keys
 
