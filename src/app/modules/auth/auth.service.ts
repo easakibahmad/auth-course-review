@@ -68,7 +68,7 @@ const changePassword = async (
     Number(config.bcrypt_salt_rounds)
   );
   // console.log(userData);
-  await userModel.findOneAndUpdate(
+  const result: any = await userModel.findOneAndUpdate(
     {
       _id: userData._id,
       role: userData.role,
@@ -78,7 +78,7 @@ const changePassword = async (
     }
   );
 
-  return null;
+  return result;
 };
 export const authServices = {
   loginUser,
