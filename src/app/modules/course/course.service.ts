@@ -62,12 +62,14 @@ const updateCourseIntoDB = async (
     updatedData.tags = updatedTags.filter((tag) => tag !== null);
   }
 
+  // to update details
   if (details && Object.keys(details).length) {
     for (const [key, value] of Object.entries(details)) {
       updatedData[`details.${key}`] = value;
     }
   }
 
+  // send the updated data
   const result: any = await courseModel
     .findByIdAndUpdate(courseId, updatedData, {
       new: true,

@@ -63,7 +63,7 @@ const createCourse = catchAsync(async (req, res) => {
 
 // update course data
 const updateCourse = catchAsync(async (req, res) => {
-  const { courseId } = req.params;
+  const { courseId } = req.params; // get courseId from param
 
   // check courseId is valid or not
   const checkCourseExistOrNot = await courseModel.findOne({
@@ -77,7 +77,7 @@ const updateCourse = catchAsync(async (req, res) => {
     );
   }
 
-  const courseDataForUpdate = req.body;
+  const courseDataForUpdate = req.body; // get updating data from request body
 
   const updatedDataKeys = Object.keys(courseDataForUpdate); // check updated data keys
 
@@ -88,10 +88,7 @@ const updateCourse = catchAsync(async (req, res) => {
   ); //get invalid keys
 
   if (invalidKeys.length > 0) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "Invalid keys found for updating"
-    );
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid keys found");
   }
 
   const result = await courseServices.updateCourseIntoDB(
@@ -99,7 +96,7 @@ const updateCourse = catchAsync(async (req, res) => {
     courseDataForUpdate
   );
 
-  // response data after updating
+  // response data format
   const resultForResponse = {
     _id: result?._id,
     title: result?.title,

@@ -17,6 +17,8 @@ router.post(
   ValidateRequest(createCourseValidationSchema),
   courseControllers.createCourse
 );
+
+// route to update course data
 router.put(
   "/courses/:courseId",
   auth(TRole.admin),
