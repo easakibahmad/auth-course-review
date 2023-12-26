@@ -7,9 +7,11 @@ import ZodErrorHandling from "../errors/ZodErrorHandling";
 import { ZodError } from "zod";
 import DuplicateError from "../errors/DuplicateError";
 import ValidationError from "../errors/ValidationError";
+import JWTError from "../errors/JWTError";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  let statusCode = 500;
+  let statusCode = err instanceof JsonWebTokenError ? 401 : 500;
   let message = "Something went wrong!";
   let errorMessageGlobal = err.message;
   let errorDetails: TErrorDetails = [
@@ -25,8 +27,9 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     },
   ];
 
+  // for cast error
   if (err?.name === "CastError") {
-    const foundedCastError = CastError(err);
+    const foundedCastError: any = CastError(err);
 
     const specificMessageForId =
       foundedCastError?.errorDetails[0]?.message.match(/"([^"]+)"/);
@@ -38,9 +41,14 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = foundedCastError?.statusCode;
     message = foundedCastError?.message;
     errorDetails = foundedCastError?.errorDetails;
-    errorDetails[0].value = invalidId;
-    errorDetails[0].stringValue = invalidId;
-  } else if (err instanceof ZodError) {
+    if (errorDetails !== null) {
+      errorDetails[0].value = invalidId;
+      errorDetails[0].stringValue = invalidId;
+    }
+  }
+
+  // for zod error
+  else if (err instanceof ZodError) {
     const foundedZodError = ZodErrorHandling(err);
 
     const errors = err.issues
@@ -52,7 +60,10 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = foundedZodError?.statusCode;
     message = foundedZodError?.message;
     errorDetails = foundedZodError?.errorDetails;
-  } else if (err?.code === 11000) {
+  }
+
+  // for 11000 error code
+  else if (err?.code === 11000) {
     const foundedDuplicateError = DuplicateError(err);
 
     const match = err.message.match(/dup key: { (\w+): "([^"]+)" }/);
@@ -66,26 +77,44 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = foundedDuplicateError?.statusCode;
     message = foundedDuplicateError?.message;
     errorDetails = foundedDuplicateError?.errorDetails;
-  } else if (err?.name === "ValidationError") {
+  }
+
+  // for validation error
+  else if (err?.name === "ValidationError") {
     const foundedValidationError = ValidationError(err);
     statusCode = foundedValidationError?.statusCode;
     message = foundedValidationError?.message;
     errorDetails = foundedValidationError?.errorDetails;
-  } else if (err instanceof AppError) {
+  }
+
+  // for App error
+  else if (err instanceof AppError) {
     message = "App Error";
     statusCode = err?.statusCode;
     errorDetails = [
       {
-        stringValue: "",
-        valueType: "",
-        kind: "",
-        value: "",
-        path: "",
-        reason: "",
         name: "AppError",
         message: err.message,
       },
     ];
+  }
+
+  // custom JWT error checking
+  else if (err instanceof JWTError) {
+    message = "Unauthorized Access";
+    statusCode = err?.statusCode;
+
+    errorMessageGlobal =
+      "You do not have the necessary permissions to access this resource.";
+    errorDetails = null;
+  }
+
+  // error from JsonWebToken
+  else if (err instanceof JsonWebTokenError) {
+    message = "Unauthorized Access";
+    errorMessageGlobal =
+      "You do not have the necessary permissions to access this resource.";
+    errorDetails = null;
   }
 
   return res.status(statusCode).json({
@@ -93,7 +122,10 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     message,
     errorMessage: errorMessageGlobal ? errorMessageGlobal : err.message,
     errorDetails,
-    stack: err?.stack || null,
+    stack:
+      err instanceof JWTError || err instanceof JsonWebTokenError
+        ? null
+        : err?.stack || null,
   });
 };
 

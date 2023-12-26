@@ -101,6 +101,11 @@
 4. NotFoundRoute implemented
 5. For validating request created ValidateRequest.ts file
 
+# Authentication and Authorization
+
+Created auth.ts file for middleware support.  
+And implemented jwt authentication and authorization in this file
+
 # Utils
 
 1. CatchAsync.ts file created for reduce repeated try-catch block as a RequestHandler
@@ -108,8 +113,7 @@
 
 # Routes
 
-1. course routes used directly in app.ts file
-2. others routes (review, category) are customized inside index.ts file in routes folder
+Routes are customized inside index.ts file in routes folder and used in app.ts file
 
 # Vercel deploy
 

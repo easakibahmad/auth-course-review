@@ -5,6 +5,7 @@ import catchAsync from "../utils/CatchAsync";
 import config from "../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { TUserRole } from "../modules/user/user.interface";
+import JWTError from "../errors/JWTError";
 
 const auth = (...userRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +13,7 @@ const auth = (...userRoles: TUserRole[]) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
+      throw new JWTError(httpStatus.UNAUTHORIZED, "Unauthorized Access");
     }
 
     // check token valid or not
@@ -25,7 +26,7 @@ const auth = (...userRoles: TUserRole[]) => {
 
     //check user role valid or not
     if (userRoles && !userRoles.includes(role)) {
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
+      throw new JWTError(httpStatus.UNAUTHORIZED, "Unauthorized Access");
     }
 
     //get user info by jwt token
