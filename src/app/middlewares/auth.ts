@@ -25,10 +25,7 @@ const auth = (...userRoles: TUserRole[]) => {
 
     //check user role valid or not
     if (userRoles && !userRoles.includes(role)) {
-      throw new AppError(
-        httpStatus.UNAUTHORIZED,
-        "You are not authorized (you have to be admin)"
-      );
+      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
     }
 
     //get user info by jwt token
