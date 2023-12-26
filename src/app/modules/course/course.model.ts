@@ -21,26 +21,34 @@ const detailsSchema = new Schema<TDetails>({
   },
 });
 
-const courseSchema = new Schema<TCourse>({
-  title: {
-    type: String,
-    unique: true,
-    required: true,
+const courseSchema = new Schema<TCourse>(
+  {
+    title: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    instructor: { type: String, required: true },
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: "categoryModel",
+      required: true,
+    },
+    price: { type: Number, required: true },
+    tags: { type: [tagSchema], required: true },
+    startDate: { type: String, required: true },
+    endDate: { type: String, required: true },
+    language: { type: String, required: true },
+    provider: { type: String, required: true },
+    durationInWeeks: { type: Number, required: true },
+    details: { type: detailsSchema, required: true },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-  instructor: { type: String, required: true },
-  categoryId: {
-    type: Schema.Types.ObjectId,
-    ref: "categoryModel",
-    required: true,
-  },
-  price: { type: Number, required: true },
-  tags: { type: [tagSchema], required: true },
-  startDate: { type: String, required: true },
-  endDate: { type: String, required: true },
-  language: { type: String, required: true },
-  provider: { type: String, required: true },
-  durationInWeeks: { type: Number, required: true },
-  details: { type: detailsSchema, required: true },
-});
+  { timestamps: true }
+);
 
 export const courseModel = model<TCourse>("Course", courseSchema);

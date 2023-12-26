@@ -5,16 +5,21 @@ import {
 } from "./course.validation";
 import ValidateRequest from "../../middlewares/ValidateRequest";
 import { courseControllers } from "./course.controller";
+import auth from "../../middlewares/auth";
+import { TRole } from "../user/user.constant";
 
 const router = express.Router();
 
+// route to create new course
 router.post(
-  "/course",
+  "/courses",
+  auth(TRole.admin),
   ValidateRequest(createCourseValidationSchema),
   courseControllers.createCourse
 );
 router.put(
   "/courses/:courseId",
+  auth(TRole.admin),
   ValidateRequest(updateCourseValidationSchema),
   courseControllers.updateCourse
 );

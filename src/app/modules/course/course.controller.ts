@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AppError from "../../errors/AppError";
 import catchAsync from "../../utils/CatchAsync";
 import SendResponse from "../../utils/SendResponse";
@@ -8,8 +9,9 @@ import { updateCourseValidationSchema } from "./course.validation";
 import { courseModel } from "./course.model";
 
 const createCourse = catchAsync(async (req, res) => {
-  const courseData = req.body;
+  const courseData = req.body; //get course data from request body
 
+  //check user exists or not
   const checkCategoryExistOrNot = await categoryModel.findOne({
     _id: courseData.categoryId,
   });
@@ -21,16 +23,19 @@ const createCourse = catchAsync(async (req, res) => {
     );
   }
 
+  //add user _id as createdBy reference
+  courseData.createdBy = req?.user?._id;
+
   const result = await courseServices.createCourseIntoDB(courseData);
 
-  //this will be the response when course created
+  //response data format
   const resultForResponse = {
     _id: result._id,
     title: result.title,
     instructor: result.instructor,
     categoryId: result.categoryId,
     price: result.price,
-    tags: result.tags.map((tag) => ({
+    tags: result.tags.map((tag: any) => ({
       name: tag.name,
       isDeleted: tag.isDeleted,
     })),
@@ -43,6 +48,9 @@ const createCourse = catchAsync(async (req, res) => {
       level: result.details.level,
       description: result.details.description,
     },
+    createdBy: result.createdBy,
+    createdAt: result.createdAt,
+    updatedAt: result.updatedAt,
   };
 
   SendResponse(res, {
@@ -98,7 +106,7 @@ const updateCourse = catchAsync(async (req, res) => {
     instructor: result?.instructor,
     categoryId: result?.categoryId,
     price: result?.price,
-    tags: result?.tags.map((tag) => ({
+    tags: result?.tags.map((tag: any) => ({
       name: tag.name,
       isDeleted: tag.isDeleted,
     })),
@@ -111,6 +119,14 @@ const updateCourse = catchAsync(async (req, res) => {
       level: result?.details.level,
       description: result?.details.description,
     },
+    createdBy: {
+      _id: result.createdBy?._id,
+      username: result.createdBy?.username,
+      email: result.createdBy?.email,
+      role: result.createdBy?.role,
+    },
+    createdAt: result?.createdAt,
+    updatedAt: result?.updatedAt,
   };
 
   SendResponse(res, {
@@ -139,10 +155,19 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
   const result = await courseServices.getSingleCourseWithReviewFromDB(courseId);
 
   //reviews data
-  const resultForReviewResponse = result?.reviews.map((review) => ({
+  const resultForReviewResponse = result?.reviews.map((review: any) => ({
+    _id: review._id,
     courseId: review.courseId,
     rating: review.rating,
     review: review.review,
+    createdBy: {
+      _id: review.createdBy?._id,
+      username: review.createdBy?.username,
+      email: review.createdBy?.email,
+      role: review.createdBy?.role,
+    },
+    createdAt: review.createdAt,
+    updatedAt: review.updatedAt,
   }));
   // course data
   const resultForCourseResponse = {
@@ -151,7 +176,7 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
     instructor: result?.course?.instructor,
     categoryId: result?.course?.categoryId,
     price: result?.course?.price,
-    tags: result?.course?.tags.map((tag) => ({
+    tags: result?.course?.tags.map((tag: any) => ({
       name: tag.name,
       isDeleted: tag.isDeleted,
     })),
@@ -164,12 +189,20 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
       level: result?.course?.details.level,
       description: result?.course?.details.description,
     },
+    createdBy: {
+      _id: result?.course?.createdBy?._id,
+      username: result?.course?.createdBy?.username,
+      email: result?.course?.createdBy?.email,
+      role: result?.course?.createdBy?.role,
+    },
+    createdAt: result?.course?.createdAt,
+    updatedAt: result?.course?.updatedAt,
   };
 
   SendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Course and Reviews retrieved successfully",
+    message: "Course with reviews retrieved successfully",
     data: { course: resultForCourseResponse, reviews: resultForReviewResponse },
   });
 });
@@ -185,7 +218,7 @@ const getBestCourse = catchAsync(async (req, res) => {
     instructor: result?.course?.instructor,
     categoryId: result?.course?.categoryId,
     price: result?.course?.price,
-    tags: result?.course?.tags.map((tag) => ({
+    tags: result?.course?.tags.map((tag: any) => ({
       name: tag.name,
       isDeleted: tag.isDeleted,
     })),
@@ -198,6 +231,14 @@ const getBestCourse = catchAsync(async (req, res) => {
       level: result?.course?.details.level,
       description: result?.course?.details.description,
     },
+    createdBy: {
+      _id: result?.course?.createdBy?._id,
+      username: result?.course?.createdBy?.username,
+      email: result?.course?.createdBy?.email,
+      role: result?.course?.createdBy?.role,
+    },
+    createdAt: result?.course?.createdAt,
+    updatedAt: result?.course?.updatedAt,
   };
 
   SendResponse(res, {
@@ -216,14 +257,14 @@ const getBestCourse = catchAsync(async (req, res) => {
 const getAllCourses = catchAsync(async (req, res) => {
   const result = await courseServices.getAllCoursesFromDB(req.query);
 
-  const resultForResponse = result.result.map((data) => {
+  const resultForResponse = result.result.map((data: any) => {
     const course = {
       _id: data._id,
       title: data?.title,
       instructor: data.instructor,
       categoryId: data.categoryId,
       price: data.price,
-      tags: data.tags.map((tag) => ({
+      tags: data.tags.map((tag: any) => ({
         name: tag.name,
         isDeleted: tag.isDeleted,
       })),
@@ -236,6 +277,14 @@ const getAllCourses = catchAsync(async (req, res) => {
         level: data.details.level,
         description: data.details.description,
       },
+      createdBy: {
+        _id: data.createdBy?._id,
+        username: data.createdBy?.username,
+        email: data.createdBy?.email,
+        role: data.createdBy?.role,
+      },
+      createdAt: data?.createdAt,
+      updatedAt: data?.updatedAt,
     };
     return course;
   });

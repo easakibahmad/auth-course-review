@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
@@ -7,6 +8,7 @@ import { TCourse } from "./course.interface";
 import { courseModel } from "./course.model";
 import { CalculateWeekDifference } from "./course.utils";
 
+// create new course
 const createCourseIntoDB = async (payload: TCourse) => {
   //calculate week difference using utils function CalculateWeekDifference
   payload.durationInWeeks = CalculateWeekDifference(
@@ -14,7 +16,7 @@ const createCourseIntoDB = async (payload: TCourse) => {
     payload.endDate
   );
 
-  const newCourse = await courseModel.create(payload);
+  const newCourse: any = await courseModel.create(payload);
 
   return newCourse;
 };
@@ -66,17 +68,23 @@ const updateCourseIntoDB = async (
     }
   }
 
-  const result = await courseModel.findByIdAndUpdate(courseId, updatedData, {
-    new: true,
-    runValidators: true,
-  });
+  const result: any = await courseModel
+    .findByIdAndUpdate(courseId, updatedData, {
+      new: true,
+      runValidators: true,
+    })
+    .populate("createdBy");
   return result;
 };
 
 // get course with review
 const getSingleCourseWithReviewFromDB = async (courseId: string) => {
-  const result = await courseModel.findById(courseId);
-  const reviews = await reviewModel.find({ courseId: courseId });
+  const result: any = await courseModel
+    .findById(courseId)
+    .populate("createdBy");
+  const reviews: any = await reviewModel
+    .find({ courseId: courseId })
+    .populate("createdBy");
   return { course: result, reviews: reviews };
 };
 
@@ -124,9 +132,11 @@ const getBestCourseFromDB = async () => {
     }
   }
 
-  const bestCourseFound = await courseModel.findById({
-    _id: bestWeightedCourse.courseId,
-  });
+  const bestCourseFound: any = await courseModel
+    .findById({
+      _id: bestWeightedCourse.courseId,
+    })
+    .populate("createdBy");
 
   return {
     course: bestCourseFound,
@@ -240,8 +250,9 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   let pageAsNumber = parseInt(page as string);
   let dataWithPageAndLimit = (pageAsNumber - 1) * limitAsNumber;
 
-  const retrievedCourseByFiltering = await courseModel
+  const retrievedCourseByFiltering: any = await courseModel
     .find(applyFiltering)
+    .populate("createdBy")
     .sort(applySort)
     .skip(dataWithPageAndLimit)
     .limit(limitAsNumber);
@@ -257,7 +268,12 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   const total = totalCourses?.length; // calculated total length where query applied. To set as a meta property(total)
 
-  return { result: retrievedCourseByFiltering, pageAsNumber, limitAsNumber, total };
+  return {
+    result: retrievedCourseByFiltering,
+    pageAsNumber,
+    limitAsNumber,
+    total,
+  };
 };
 
 export const courseServices = {

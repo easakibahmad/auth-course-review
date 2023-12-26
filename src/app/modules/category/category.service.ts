@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TCategory } from "./category.interface";
 import { categoryModel } from "./category.model";
 
+// create category
 const createCategoryIntoDB = async (payload: TCategory) => {
-  const newCategory = await categoryModel.create(payload);
-
+  const newCategory: any = await categoryModel.create(payload);
   return newCategory;
 };
 
 const getAllCategoriesFromDB = async () => {
-  const result = await categoryModel.find();
+  const result: any = await categoryModel.find().populate("createdBy");
   return result;
 };
 
