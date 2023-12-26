@@ -134,6 +134,7 @@ const getBestCourseFromDB = async () => {
     }
   }
 
+  // best course after applying business logic
   const bestCourseFound: any = await courseModel
     .findById({
       _id: bestWeightedCourse.courseId,

@@ -26,11 +26,16 @@ router.put(
   courseControllers.updateCourse
 );
 
+// route to get single course with reviews
 router.get(
   "/courses/:courseId/reviews",
   courseControllers.getSingleCourseWithReview
 );
+
+// route to get best course
 router.get("/course/best", courseControllers.getBestCourse);
+
+// route to get all courses
 router.get("/courses", courseControllers.getAllCourses);
 
 export const courseRoutes = router;
