@@ -135,7 +135,7 @@ const updateCourse = catchAsync(async (req, res) => {
 });
 
 const getSingleCourseWithReview = catchAsync(async (req, res) => {
-  const { courseId } = req.params;
+  const { courseId } = req.params; // get courseId from request params
 
   // check courseId is valid or not
   const checkCourseExistOrNot = await courseModel.findOne({
@@ -151,7 +151,7 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
 
   const result = await courseServices.getSingleCourseWithReviewFromDB(courseId);
 
-  //reviews data
+  // reviews data for response
   const resultForReviewResponse = result?.reviews.map((review: any) => ({
     _id: review._id,
     courseId: review.courseId,
@@ -166,7 +166,8 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
     createdAt: review.createdAt,
     updatedAt: review.updatedAt,
   }));
-  // course data
+
+  // course data for response
   const resultForCourseResponse = {
     _id: result?.course?._id,
     title: result?.course?.title,
@@ -208,7 +209,7 @@ const getSingleCourseWithReview = catchAsync(async (req, res) => {
 const getBestCourse = catchAsync(async (req, res) => {
   const result = await courseServices.getBestCourseFromDB();
 
-  // course data
+  // response data format
   const resultForCourseResponse = {
     _id: result?.course?._id,
     title: result?.course?.title,

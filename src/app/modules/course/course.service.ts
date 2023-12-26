@@ -83,10 +83,10 @@ const updateCourseIntoDB = async (
 const getSingleCourseWithReviewFromDB = async (courseId: string) => {
   const result: any = await courseModel
     .findById(courseId)
-    .populate("createdBy");
+    .populate("createdBy"); // get course data
   const reviews: any = await reviewModel
     .find({ courseId: courseId })
-    .populate("createdBy");
+    .populate("createdBy"); // get reviews data
   return { course: result, reviews: reviews };
 };
 
