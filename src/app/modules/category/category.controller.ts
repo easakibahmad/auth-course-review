@@ -43,7 +43,7 @@ const createCategory = catchAsync(async (req, res) => {
 const getAllCategories = catchAsync(async (req, res) => {
   const result = await categoryServices.getAllCategoriesFromDB();
 
-  // response data
+  // response data format
   const resultForResponse = result.map((data: any) => ({
     _id: data._id,
     name: data.name,

@@ -9,6 +9,7 @@ const createCategoryIntoDB = async (payload: TCategory) => {
   return newCategory;
 };
 
+// get all categories
 const getAllCategoriesFromDB = async () => {
   const result: any = await categoryModel.find().populate("createdBy");
   return result;
