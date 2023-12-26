@@ -17,6 +17,27 @@
 9. npm i zod (zod validator installation)
 10. npm i http-status (for http-status code)
 11. eslint installation
+
+    1. add these two lines inside tsconfig.json file  
+       "include": ["src"], // which files to compile  
+       "exclude": ["node_modules"], // which files to skip
+    2. npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
+    3. npx eslint --init
+    4. add (inside eslintrc.json file)  
+        "rules": {  
+       "no-unused-vars": "error",  
+       "no-unused-expressions": "error",  
+       "prefer-const": "error",  
+       "no-console": "error",  
+       "no-undef": "error"  
+       },  
+       "globals": {  
+       "process": "readonly"  
+       }
+    5. create .eslintignore file and add those files inside the file:  
+       node_modules  
+       dist
+
 12. npm i bcrypt (bcrypt for password hashing)  
     npm i @types/bcrypt
 13. npm i jsonwebtoken (jwt token)  
@@ -38,30 +59,39 @@
 
 # API Endpoints:
 
-1. Endpoint: /api/course  
+1. Endpoint: /api/courses  
    Method: POST  
-   for creating a Course
+   for creating a Course (only admin can do this)
 2. Endpoint: /api/courses  
    Method: GET  
    Get Paginated and Filtered Courses by utilizing query parameters
 3. Endpoint: /api/categories  
    Method: POST  
-   for creating a Category
+   for creating a Category (only admin can do this)
 4. Endpoint: /api/categories  
    Method: GET  
    Get All Categories
 5. Endpoint: /api/reviews  
    Method: POST  
-   for creating a Review
+   for creating a Review (only user can do this)
 6. Endpoint: /api/courses/:courseId  
    Method: PUT  
-   Update a Course (Partial Update with Dynamic Update)
+   Update a Course (only admin can do this)
 7. Endpoint: /api/courses/:courseId/reviews  
    Method: GET  
    Get Course by ID with Reviews
 8. Endpoint: /api/course/best  
    Method: GET  
    Get the Best Course Based on Average Review (Rating)
+9. Endpoint: /api/auth/register  
+   Method: POST  
+   User registration
+10. Route: /api/auth/login  
+    Method: POST  
+    User login
+11. Route: /api/auth/change-password  
+    Method: POST  
+    change password
 
 # Error handling
 
@@ -84,7 +114,7 @@
 # Vercel deploy
 
 1. npm i -g vercel (install vercel)
-2. locally build (npm run build)
+2. npm run build (locally build)
 3. create vercel.json file in root directory
 4. vercel login (run this command in terminal)
 5. vercel (run this command in terminal and answer carefully the questions)
