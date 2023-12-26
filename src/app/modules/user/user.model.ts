@@ -43,9 +43,14 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// check user exists in collection
+// check user exists in collection by username
 userSchema.statics.isUserExistsByUsername = async function (username: string) {
   return await userModel.findOne({ username }).select("+password");
+};
+
+// check user exists in collection by _id
+userSchema.statics.isUserExistsById = async function (_id: string) {
+  return await userModel.findOne({_id}).select("+password");
 };
 
 // check password match or not

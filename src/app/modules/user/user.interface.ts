@@ -12,7 +12,13 @@ export interface TUser {
 
 // this is static methods to check user and to check password
 export interface UserModelStatic extends Model<TUser> {
+  // find user by username
   isUserExistsByUsername(username: string): Promise<TUser>;
+
+  // find user by _id
+  isUserExistsById(_id: string): Promise<TUser>;
+
+  // check password matched or not
   isPasswordMatched(
     inputPassword: string,
     hashedPassword: string
