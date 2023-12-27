@@ -1,8 +1,24 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from "mongoose";
-import { TUser, UserModelStatic } from "./user.interface";
+import {
+  TPasswordArrayElement,
+  TUser,
+  UserModelStatic,
+} from "./user.interface";
 import config from "../../config";
 import bcrypt from "bcrypt";
+
+// password array element schema
+const passwordArrayElementSchema = new Schema<TPasswordArrayElement>({
+  password: {
+    type: String,
+    required: true,
+  },
+  passwordIssuingTime: {
+    type: String,
+    required: true,
+  },
+});
 
 const userSchema = new Schema<TUser, UserModelStatic>(
   {
@@ -28,7 +44,7 @@ const userSchema = new Schema<TUser, UserModelStatic>(
     },
     passwordArray: {
       //password array to track the passwords
-      type: [String],
+      type: [passwordArrayElementSchema],
       required: false,
     },
   },
@@ -45,7 +61,16 @@ userSchema.pre("save", async function (next) {
     Number(config.bcrypt_salt_rounds)
   );
 
-  user.passwordArray?.push(user.password); //push user password into passwordArray
+  // set the password as password array element
+  const passwordArrayElementObject: TPasswordArrayElement = {
+    password: user.password,
+    passwordIssuingTime: new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " "), //format "YYYY-MM-DD HH:mm:ss"
+  };
+
+  user.passwordArray?.push(passwordArrayElementObject); //push into passwordArray
 
   next();
 });

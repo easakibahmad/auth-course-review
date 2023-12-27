@@ -69,13 +69,27 @@ const changePassword = async (
     for (const previousPassword of userExists.passwordArray) {
       const isMatched = await userModel.isPasswordMatched(
         payload?.newPassword,
-        previousPassword
+        previousPassword.password
       );
 
       if (isMatched) {
+        const formattedDate = previousPassword.passwordIssuingTime.slice(0, 10); // "yyyy-MM-DD"
+
+        const formattedTime = previousPassword.passwordIssuingTime.slice(
+          11,
+          16
+        ); // "HH:MM"
+
+        const hourPart = parseInt(formattedTime.slice(0, 2)); // get hour part
+        const minutePart = parseInt(formattedTime.slice(3, 5)); // get minute part
+
+        const formattedForAMPM = `${hourPart % 12 || 12}:${minutePart} ${
+          hourPart < 12 ? "AM" : "PM"
+        }`; // get am or pm format
+
         throw new AppError(
           httpStatus.FORBIDDEN,
-          "New password must not match with the previous two passwords as well as the current one."
+          `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${formattedDate} at ${formattedForAMPM}.)`
         );
       }
     }

@@ -2,13 +2,19 @@
 import { Model } from "mongoose";
 import { TRole } from "./user.constant";
 
+// type for user password and password creating time 
+export type TPasswordArrayElement = {
+  password: string;
+  passwordIssuingTime: string;
+};
+
 //user type
 export interface TUser {
   username: string;
   email: string;
   password: string;
   role: "user" | "admin";
-  passwordArray?: string[]; // to track previous passwords for the purpose of reset password
+  passwordArray?: TPasswordArrayElement[]; // to track previous passwords for the purpose of reset password
 }
 
 // this is static methods to check user and to check password
