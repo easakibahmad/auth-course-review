@@ -59,37 +59,90 @@
 
 # API Endpoints:
 
+1. User Registration
+
+- Route: [/api/auth/register](https://auth-course-review.vercel.app/api/auth/register)
+- Method: POST
+- Request Body:
+  - example 1: admin
+  ```json
+  {
+    "username": "adminsakib",
+    "email": "adminsakib@ahmad.com",
+    "password": "adminsakib58",
+    "role": "admin"
+  }
+  ```
+  - example 2: user
+  ```json
+  {
+    "username": "usersakib",
+    "email": "usersakib@ahmad.com",
+    "password": "usersakib58"
+  }
+  ```
+- Response:
+  - example 1: admin
+  ```json
+  {
+    "success": true,
+    "statusCode": 201,
+    "message": "User registered successfully",
+    "data": {
+      "_id": "658cb0b62fdf243761f3cd2e",
+      "username": "adminsakib",
+      "email": "adminsakib@ahmad.com",
+      "role": "admin",
+      "createdAt": "2023-12-27T23:18:14.999Z",
+      "updatedAt": "2023-12-27T23:18:14.999Z"
+    }
+  }
+  ```
+  - example 2: user
+  ```json
+  {
+    "success": true,
+    "statusCode": 201,
+    "message": "User registered successfully",
+    "data": {
+      "_id": "658cb4042a98dd7803471f5b",
+      "username": "usersakib",
+      "email": "usersakib@ahmad.com",
+      "role": "user",
+      "createdAt": "2023-12-27T23:32:20.426Z",
+      "updatedAt": "2023-12-27T23:32:20.426Z"
+    }
+  }
+  ```
+
 1. Endpoint: /api/courses  
-   Method: POST  
-   for creating a Course (only admin can do this)
-2. Endpoint: /api/courses  
    Method: GET  
    Get Paginated and Filtered Courses by utilizing query parameters
-3. Endpoint: /api/categories  
+2. Endpoint: /api/categories  
    Method: POST  
    for creating a Category (only admin can do this)
-4. Endpoint: /api/categories  
+3. Endpoint: /api/categories  
    Method: GET  
    Get All Categories
-5. Endpoint: /api/reviews  
+4. Endpoint: /api/reviews  
    Method: POST  
    for creating a Review (only user can do this)
-6. Endpoint: /api/courses/:courseId  
+5. Endpoint: /api/courses/:courseId  
    Method: PUT  
    Update a Course (only admin can do this)
-7. Endpoint: /api/courses/:courseId/reviews  
+6. Endpoint: /api/courses/:courseId/reviews  
    Method: GET  
    Get Course by ID with Reviews
-8. Endpoint: /api/course/best  
+7. Endpoint: /api/course/best  
    Method: GET  
    Get the Best Course Based on Average Review (Rating)
-9. Endpoint: /api/auth/register  
+8. Endpoint: /api/auth/register  
    Method: POST  
    User registration
-10. Route: /api/auth/login  
-    Method: POST  
-    User login
-11. Route: /api/auth/change-password  
+9. Route: /api/auth/login  
+   Method: POST  
+   User login
+10. Route: /api/auth/change-password  
     Method: POST  
     change password
 
