@@ -59,61 +59,116 @@
 
 # API Endpoints:
 
-1. User Registration
+1.  User Registration
 
-- Route: [/api/auth/register](https://auth-course-review.vercel.app/api/auth/register)
+- Route: /api/auth/register
 - Method: POST
 - Request Body:
   - example 1: admin
-  ```json
-  {
-    "username": "adminsakib",
-    "email": "adminsakib@ahmad.com",
-    "password": "adminsakib58",
-    "role": "admin"
-  }
-  ```
-  - example 2: user
-  ```json
-  {
-    "username": "usersakib",
-    "email": "usersakib@ahmad.com",
-    "password": "usersakib58"
-  }
-  ```
-- Response:
-  - example 1: admin
-  ```json
-  {
-    "success": true,
-    "statusCode": 201,
-    "message": "User registered successfully",
-    "data": {
-      "_id": "658cb0b62fdf243761f3cd2e",
+    ```json
+    {
       "username": "adminsakib",
       "email": "adminsakib@ahmad.com",
-      "role": "admin",
-      "createdAt": "2023-12-27T23:18:14.999Z",
-      "updatedAt": "2023-12-27T23:18:14.999Z"
+      "password": "adminsakib58",
+      "role": "admin"
     }
-  }
-  ```
+    ```
   - example 2: user
-  ```json
-  {
-    "success": true,
-    "statusCode": 201,
-    "message": "User registered successfully",
-    "data": {
-      "_id": "658cb4042a98dd7803471f5b",
+    ```json
+    {
       "username": "usersakib",
       "email": "usersakib@ahmad.com",
-      "role": "user",
-      "createdAt": "2023-12-27T23:32:20.426Z",
-      "updatedAt": "2023-12-27T23:32:20.426Z"
+      "password": "usersakib58"
     }
-  }
-  ```
+    ```
+- Response:
+  - example 1: admin
+    ```json
+    {
+      "success": true,
+      "statusCode": 201,
+      "message": "User registered successfully",
+      "data": {
+        "_id": "658cb0b62fdf243761f3cd2e",
+        "username": "adminsakib",
+        "email": "adminsakib@ahmad.com",
+        "role": "admin",
+        "createdAt": "2023-12-27T23:18:14.999Z",
+        "updatedAt": "2023-12-27T23:18:14.999Z"
+      }
+    }
+    ```
+  - example 2: user
+    ```json
+    {
+      "success": true,
+      "statusCode": 201,
+      "message": "User registered successfully",
+      "data": {
+        "_id": "658cb4042a98dd7803471f5b",
+        "username": "usersakib",
+        "email": "usersakib@ahmad.com",
+        "role": "user",
+        "createdAt": "2023-12-27T23:32:20.426Z",
+        "updatedAt": "2023-12-27T23:32:20.426Z"
+      }
+    }
+    ```
+
+2.  User Login
+
+- Route: /api/auth/login
+- Method: POST
+- Request Body:
+  - example 1: admin
+    ```json
+    {
+      "username": "adminsakib",
+      "password": "adminsakib58"
+    }
+    ```
+  - example 2: user
+    ```json
+    {
+      "username": "usersakib",
+      "password": "usersakib58"
+    }
+    ```
+- Response:
+  - example 1: admin
+    ```json
+    {
+      "success": true,
+      "statusCode": 200,
+      "message": "User login successful",
+      "data": {
+        "user": {
+          "_id": "658cb0b62fdf243761f3cd2e",
+          "username": "adminsakib",
+          "email": "adminsakib@ahmad.com",
+          "role": "admin"
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThjYjBiNjJmZGYyNDM3NjFmM2NkMmUiLCJyb2xlIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluc2FraWJAYWhtYWQuY29tIiwiaWF0IjoxNzAzNzIwODc3LCJleHAiOjE3MDQ1ODQ4Nzd9.770HDzwQkcXu_OTU3U-Cc-px_TfRNmJ6GF8FvYwYRd8"
+      }
+    }
+    ```
+  - example 2: user
+    ```json
+    {
+      "success": true,
+      "statusCode": 200,
+      "message": "User login successful",
+      "data": {
+        "user": {
+          "_id": "658cb4042a98dd7803471f5b",
+          "username": "usersakib",
+          "email": "usersakib@ahmad.com",
+          "role": "user"
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThjYjQwNDJhOThkZDc4MDM0NzFmNWIiLCJyb2xlIjoidXNlciIsImVtYWlsIjoidXNlcnNha2liQGFobWFkLmNvbSIsImlhdCI6MTcwMzcyMTEyMCwiZXhwIjoxNzA0NTg1MTIwfQ.mvi2HRmhrBTZvIRwGycDXUIJ3QRzL2yA-78sHD60ocA"
+      }
+    }
+    ```
 
 1. Endpoint: /api/courses  
    Method: GET  
