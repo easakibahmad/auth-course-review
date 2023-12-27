@@ -26,6 +26,11 @@ const userSchema = new Schema<TUser, UserModelStatic>(
       enum: ["user", "admin"],
       default: "user",
     },
+    passwordArray: {
+      //password array to track the passwords
+      type: [String],
+      required: false,
+    },
   },
   {
     timestamps: true,
@@ -40,6 +45,8 @@ userSchema.pre("save", async function (next) {
     Number(config.bcrypt_salt_rounds)
   );
 
+  user.passwordArray?.push(user.password); //push user password into passwordArray
+
   next();
 });
 
@@ -50,7 +57,7 @@ userSchema.statics.isUserExistsByUsername = async function (username: string) {
 
 // check user exists in collection by _id
 userSchema.statics.isUserExistsById = async function (_id: string) {
-  return await userModel.findOne({_id}).select("+password");
+  return await userModel.findOne({ _id }).select("+password");
 };
 
 // check password match or not

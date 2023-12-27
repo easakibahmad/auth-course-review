@@ -6,6 +6,7 @@ import AppError from "../../errors/AppError";
 import config from "../../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { passwordArrayTracker } from "./auth.utils";
 
 const loginUser = async (payload: TLoginUser) => {
   //check user exists or not by its username
@@ -62,12 +63,36 @@ const changePassword = async (
     throw new AppError(httpStatus.FORBIDDEN, "Old Password is incorrect");
   }
 
+  // check password match with current and previous 2 passwords or not
+  if (Array.isArray(userExists.passwordArray)) {
+    // check each element in password Array
+    for (const previousPassword of userExists.passwordArray) {
+      const isMatched = await userModel.isPasswordMatched(
+        payload?.newPassword,
+        previousPassword
+      );
+
+      if (isMatched) {
+        throw new AppError(
+          httpStatus.FORBIDDEN,
+          "New password must not match with the previous two passwords as well as the current one."
+        );
+      }
+    }
+  }
+
   //hash password that will be set as updated password
   const newHashedPassword = await bcrypt.hash(
     payload.newPassword,
     Number(config.bcrypt_salt_rounds)
   );
-  // console.log(userData);
+
+  //set new password into last element of passwordArray
+  if (Array.isArray(userExists.passwordArray)) {
+    passwordArrayTracker(userExists.passwordArray, newHashedPassword);
+  }
+
+  //finally update current password and passwordArray
   const result: any = await userModel.findOneAndUpdate(
     {
       _id: userData._id,
@@ -75,7 +100,9 @@ const changePassword = async (
     },
     {
       password: newHashedPassword,
-    }
+      passwordArray: userExists?.passwordArray,
+    },
+    { new: true }
   );
 
   return result;
