@@ -769,6 +769,18 @@
   }
   ```
 
+# JWT Token Payload:
+
+```json
+{
+  "_id": "658ccb3481aaa2f5da52b7f1",
+  "role": "user",
+  "email": "usersakib@ahmad.com",
+  "iat": 1703725892,
+  "exp": 1704589892
+}
+```
+
 # Error handling
 
 1. Implemented CastError, DuplicateError, ValidationError, ZodValidationError separately
@@ -777,6 +789,16 @@
 4. JWT error handling
 5. NotFoundRoute implemented
 6. For validating request created ValidateRequest.ts file
+7. Unauthorized access response:
+   ```json
+   {
+     "success": false,
+     "message": "Unauthorized Access",
+     "errorMessage": "You do not have the necessary permissions to access this resource.",
+     "errorDetails": null,
+     "stack": null
+   }
+   ```
 
 # Authentication and Authorization
 

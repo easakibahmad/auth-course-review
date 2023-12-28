@@ -42,24 +42,22 @@ const changePassword = catchAsync(async (req, res) => {
 
   // response data format
 
-  const result = await authServices.changePassword( req.user, passwordData );
-  
+  const result = await authServices.changePassword(req.user, passwordData);
 
-    const responseData = {
-      _id: result?._id,
-      username: result?.username,
-      email: result?.email,
-      role: result?.role,
-      createdAt: result?.createdAt,
-      updatedAt: result?.updatedAt,
-    };
+  const responseData = {
+    _id: result?._id,
+    username: result?.username,
+    email: result?.email,
+    role: result?.role,
+    createdAt: result?.createdAt,
+    updatedAt: result?.updatedAt,
+  };
 
-  
   SendResponse(res, {
-    statusCode: result.message? httpStatus.BAD_REQUEST : httpStatus.OK,
-    success: result.message? false: true,
-    message: result.message? result.message: "Password changed successfully",
-    data: result.message? null: responseData,
+    statusCode: result.message ? httpStatus.BAD_REQUEST : httpStatus.OK,
+    success: result.message ? false : true,
+    message: result.message ? result.message : "Password changed successfully",
+    data: result.message ? null : responseData,
   });
 });
 export const authControllers = {
