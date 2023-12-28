@@ -170,6 +170,53 @@
     }
     ```
 
+3.  Change Password
+
+- Route: /api/auth/change-password
+- Method: POST
+- Request Headers:
+  ```
+  Authorization: <JWT_TOKEN>
+  ```
+- Request Body:
+  ```json
+  {
+    "oldPassword": "usersakib58",
+    "newPassword": "pdsakib59"
+  }
+  ```
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Password changed successfully",
+    "data": {
+      "_id": "658cb4042a98dd7803471f5b",
+      "username": "usersakib",
+      "email": "usersakib@ahmad.com",
+      "role": "user",
+      "createdAt": "2023-12-27T23:32:20.426Z",
+      "updatedAt": "2023-12-28T00:04:11.749Z"
+    }
+  }
+  ```
+- Password Change Rules:  
+   The system stores only the last 2 previous passwords with timestamps.  
+   During a password change attempt:  
+   The user cannot reuse any of the last 2 passwords or the current one.  
+   If the new password matches any of the previous 2 passwords or the current one, the password change fails.  
+   If the new password is unique and different from the current password, the password change is successful.
+- Response (if password change failed):
+  ```json
+  {
+    "success": false,
+    "statusCode": 400,
+    "message": "Password change failed. Ensure the new password is unique and not among the last 2 used (last used on 2023-12-28 at 12:40 AM.)",
+    "data": null
+  }
+  ```
+
 1. Endpoint: /api/courses  
    Method: GET  
    Get Paginated and Filtered Courses by utilizing query parameters

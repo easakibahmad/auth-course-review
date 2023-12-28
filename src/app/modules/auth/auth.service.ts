@@ -43,6 +43,7 @@ const loginUser = async (payload: TLoginUser) => {
   return { existingUser, accessToken };
 };
 
+//change password
 const changePassword = async (
   userData: JwtPayload,
   payload: { oldPassword: string; newPassword: string }
@@ -63,6 +64,8 @@ const changePassword = async (
     throw new AppError(httpStatus.FORBIDDEN, "Old Password is incorrect");
   }
 
+  let flagForTrack: boolean = false; 
+  let message: string = "";
   // check password match with current and previous 2 passwords or not
   if (Array.isArray(userExists.passwordArray)) {
     // check each element in password Array
@@ -87,39 +90,44 @@ const changePassword = async (
           hourPart < 12 ? "AM" : "PM"
         }`; // get am or pm format
 
-        throw new AppError(
-          httpStatus.FORBIDDEN,
-          `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${formattedDate} at ${formattedForAMPM}.)`
-        );
+        message = `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${formattedDate} at ${formattedForAMPM}.)`;
+
+        flagForTrack = true; // if password not valid to change
       }
     }
   }
 
-  //hash password that will be set as updated password
-  const newHashedPassword = await bcrypt.hash(
-    payload.newPassword,
-    Number(config.bcrypt_salt_rounds)
-  );
+  if (flagForTrack) {
+    const result: any = {
+      message: message,
+    };
+    return result;
+  } else {
+    //hash password that will be set as updated password
+    const newHashedPassword = await bcrypt.hash(
+      payload.newPassword,
+      Number(config.bcrypt_salt_rounds)
+    );
+    //set new password into last element of passwordArray
+    if (Array.isArray(userExists.passwordArray)) {
+      passwordArrayTracker(userExists.passwordArray, newHashedPassword);
+    }
 
-  //set new password into last element of passwordArray
-  if (Array.isArray(userExists.passwordArray)) {
-    passwordArrayTracker(userExists.passwordArray, newHashedPassword);
+    //finally update current password and passwordArray
+    const result: any = await userModel.findOneAndUpdate(
+      {
+        _id: userData._id,
+        role: userData.role,
+      },
+      {
+        password: newHashedPassword,
+        passwordArray: userExists?.passwordArray,
+      },
+      { new: true }
+    );
+
+    return result;
   }
-
-  //finally update current password and passwordArray
-  const result: any = await userModel.findOneAndUpdate(
-    {
-      _id: userData._id,
-      role: userData.role,
-    },
-    {
-      password: newHashedPassword,
-      passwordArray: userExists?.passwordArray,
-    },
-    { new: true }
-  );
-
-  return result;
 };
 export const authServices = {
   loginUser,
