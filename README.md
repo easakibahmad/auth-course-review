@@ -398,7 +398,7 @@
   }
   ```
 
-1.  Create a Category (Only Admin can do this)
+6.  Create a Category (Only Admin can do this)
 
 - Endpoint: /api/categories
 - Method: POST
@@ -428,44 +428,353 @@
   }
   ```
 
-4. Endpoint: /api/courses  
-   Method: GET  
-   Get Paginated and Filtered Courses by utilizing query parameters
-5. Endpoint: /api/categories  
-   Method: POST  
-   for creating a Category (only admin can do this)
-6. Endpoint: /api/categories  
-   Method: GET  
-   Get All Categories
-7. Endpoint: /api/reviews  
-   Method: POST  
-   for creating a Review (only user can do this)
-8. Endpoint: /api/courses/:courseId  
-   Method: PUT  
-   Update a Course (only admin can do this)
-9. Endpoint: /api/courses/:courseId/reviews  
-   Method: GET  
-   Get Course by ID with Reviews
-10. Endpoint: /api/course/best  
-    Method: GET  
-    Get the Best Course Based on Average Review (Rating)
-11. Endpoint: /api/auth/register  
-    Method: POST  
-    User registration
-12. Route: /api/auth/login  
-    Method: POST  
-    User login
-13. Route: /api/auth/change-password  
-    Method: POST  
-    change password
+7.  Get All Categories
+
+- Endpoint: /api/categories
+- Method: GET
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Categories retrieved successfully",
+    "data": {
+      "categories": [
+        {
+          "_id": "658cc601a4f73a0262f7ac41",
+          "name": "Programming",
+          "createdBy": {
+            "_id": "658cb0b62fdf243761f3cd2e",
+            "username": "adminsakib",
+            "email": "adminsakib@ahmad.com",
+            "role": "admin"
+          },
+          "createdAt": "2023-12-28T00:49:05.255Z",
+          "updatedAt": "2023-12-28T00:49:05.255Z"
+        },
+        {
+          "_id": "658cc85d7a22766eeaf5bdac",
+          "name": "Wev Dev",
+          "createdBy": {
+            "_id": "658cb0b62fdf243761f3cd2e",
+            "username": "adminsakib",
+            "email": "adminsakib@ahmad.com",
+            "role": "admin"
+          },
+          "createdAt": "2023-12-28T00:59:09.508Z",
+          "updatedAt": "2023-12-28T00:59:09.508Z"
+        }
+        // ... other categories
+      ]
+    }
+  }
+  ```
+
+8.  Create a Review (Only the user can do this)
+
+- Endpoint: /api/reviews
+- Method: POST
+- Request Headers:
+  ```
+  Authorization: <JWT_TOKEN>
+  ```
+- Request Body:
+  ```json
+  {
+    "courseId": "658cc7227a22766eeaf5bda7",
+    "rating": 4,
+    "review": "This course is organized and nice to learn!!"
+  }
+  ```
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 201,
+    "message": "Review created successfully",
+    "data": {
+      "_id": "658ccb7b81aaa2f5da52b7fc",
+      "courseId": "658cc7227a22766eeaf5bda7",
+      "rating": 4,
+      "review": "This course is organized and nice to learn!!",
+      "createdBy": {
+        "_id": "658ccb3481aaa2f5da52b7f1",
+        "username": "usersakib",
+        "email": "usersakib@ahmad.com",
+        "role": "user"
+      },
+      "createdAt": "2023-12-28T01:12:27.896Z",
+      "updatedAt": "2023-12-28T01:12:27.896Z"
+    }
+  }
+  ```
+
+9.  Update a Course (Only Admin can do this)
+
+- Endpoint: /api/courses/:courseId
+- Method: PUT
+- Request Headers:
+  ```
+  Authorization: <JWT_TOKEN>
+  ```
+- Request Body:
+  ```json
+  {
+    "price": 50.5,
+    "tags": [
+      { "name": "Easy Programming", "isDeleted": false },
+      { "name": "C++", "isDeleted": false }
+    ],
+    "details": {
+      "level": "Beginner",
+      "description": "Learn Programming in easy way"
+    }
+  }
+  ```
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Course updated successfully",
+    "data": {
+      "_id": "658cc7227a22766eeaf5bda7",
+      "title": "Introduction to Programming",
+      "instructor": "Ms. Sarah",
+      "categoryId": "658cc601a4f73a0262f7ac41",
+      "price": 50.5,
+      "tags": [
+        {
+          "name": "Programming",
+          "isDeleted": false
+        },
+        {
+          "name": "Python",
+          "isDeleted": false
+        },
+        {
+          "name": "Easy OOP",
+          "isDeleted": false
+        },
+        {
+          "name": "Thread",
+          "isDeleted": false
+        },
+        {
+          "name": "Easy Programming",
+          "isDeleted": false
+        },
+        {
+          "name": "C++",
+          "isDeleted": false
+        }
+      ],
+      "startDate": "2023-08-15",
+      "endDate": "2023-12-15",
+      "language": "English",
+      "provider": "CodeMaster Institute",
+      "durationInWeeks": 18,
+      "details": {
+        "level": "Beginner",
+        "description": "Learn Programming in easy way"
+      },
+      "createdBy": {
+        "_id": "658cb0b62fdf243761f3cd2e",
+        "username": "adminsakib",
+        "email": "adminsakib@ahmad.com",
+        "role": "admin"
+      },
+      "createdAt": "2023-12-28T00:53:54.907Z",
+      "updatedAt": "2023-12-28T01:16:52.540Z"
+    }
+  }
+  ```
+
+10. Get Course by ID with Reviews
+
+- Endpoint: /api/courses/:courseId/reviews
+- Method: GET
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Course with reviews retrieved successfully",
+    "data": {
+      "course": {
+        "_id": "658cc7227a22766eeaf5bda7",
+        "title": "Introduction to Programming",
+        "instructor": "Ms. Sarah",
+        "categoryId": "658cc601a4f73a0262f7ac41",
+        "price": 50.5,
+        "tags": [
+          {
+            "name": "Programming",
+            "isDeleted": false
+          },
+          {
+            "name": "Python",
+            "isDeleted": false
+          },
+          {
+            "name": "Easy OOP",
+            "isDeleted": false
+          },
+          {
+            "name": "Thread",
+            "isDeleted": false
+          },
+          {
+            "name": "Easy Programming",
+            "isDeleted": false
+          },
+          {
+            "name": "C++",
+            "isDeleted": false
+          }
+        ],
+        "startDate": "2023-08-15",
+        "endDate": "2023-12-15",
+        "language": "English",
+        "provider": "CodeMaster Institute",
+        "durationInWeeks": 18,
+        "details": {
+          "level": "Beginner",
+          "description": "Learn Programming in easy way"
+        },
+        "createdBy": {
+          "_id": "658cb0b62fdf243761f3cd2e",
+          "username": "adminsakib",
+          "email": "adminsakib@ahmad.com",
+          "role": "admin"
+        },
+        "createdAt": "2023-12-28T00:53:54.907Z",
+        "updatedAt": "2023-12-28T01:16:52.540Z"
+      },
+      "reviews": [
+        {
+          "_id": "658ccb7b81aaa2f5da52b7fc",
+          "courseId": "658cc7227a22766eeaf5bda7",
+          "rating": 4,
+          "review": "This course is organized and nice to learn!!",
+          "createdBy": {
+            "_id": "658ccb3481aaa2f5da52b7f1",
+            "username": "usersakib",
+            "email": "usersakib@ahmad.com",
+            "role": "user"
+          },
+          "createdAt": "2023-12-28T01:12:27.896Z",
+          "updatedAt": "2023-12-28T01:12:27.896Z"
+        },
+        {
+          "_id": "658ccd3d81aaa2f5da52b886",
+          "courseId": "658cc7227a22766eeaf5bda7",
+          "rating": 5,
+          "review": "Nice and Good!!",
+          "createdBy": {
+            "_id": "658ccb3481aaa2f5da52b7f1",
+            "username": "usersakib",
+            "email": "usersakib@ahmad.com",
+            "role": "user"
+          },
+          "createdAt": "2023-12-28T01:19:57.199Z",
+          "updatedAt": "2023-12-28T01:19:57.199Z"
+        },
+        {
+          "_id": "658ccd4281aaa2f5da52b891",
+          "courseId": "658cc7227a22766eeaf5bda7",
+          "rating": 3,
+          "review": "Nice and Good!!",
+          "createdBy": {
+            "_id": "658ccb3481aaa2f5da52b7f1",
+            "username": "usersakib",
+            "email": "usersakib@ahmad.com",
+            "role": "user"
+          },
+          "createdAt": "2023-12-28T01:20:02.156Z",
+          "updatedAt": "2023-12-28T01:20:02.156Z"
+        }
+        // ... other reviews
+      ]
+    }
+  }
+  ```
+
+11. Get the Best Course Based on Average Review (Rating)
+
+- Endpoint: /api/course/best
+- Method: GET
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Best course retrieved successfully",
+    "data": {
+      "course": {
+        "_id": "658cc7227a22766eeaf5bda7",
+        "title": "Introduction to Programming",
+        "instructor": "Ms. Sarah",
+        "categoryId": "658cc601a4f73a0262f7ac41",
+        "price": 50.5,
+        "tags": [
+          {
+            "name": "Programming",
+            "isDeleted": false
+          },
+          {
+            "name": "Python",
+            "isDeleted": false
+          },
+          {
+            "name": "Easy OOP",
+            "isDeleted": false
+          },
+          {
+            "name": "Thread",
+            "isDeleted": false
+          },
+          {
+            "name": "Easy Programming",
+            "isDeleted": false
+          },
+          {
+            "name": "C++",
+            "isDeleted": false
+          }
+        ],
+        "startDate": "2023-08-15",
+        "endDate": "2023-12-15",
+        "language": "English",
+        "provider": "CodeMaster Institute",
+        "durationInWeeks": 18,
+        "details": {
+          "level": "Beginner",
+          "description": "Learn Programming in easy way"
+        },
+        "createdBy": {
+          "_id": "658cb0b62fdf243761f3cd2e",
+          "username": "adminsakib",
+          "email": "adminsakib@ahmad.com",
+          "role": "admin"
+        },
+        "createdAt": "2023-12-28T00:53:54.907Z",
+        "updatedAt": "2023-12-28T01:16:52.540Z"
+      },
+      "averageRating": 4.2,
+      "reviewCount": 6
+    }
+  }
+  ```
 
 # Error handling
 
 1. Implemented CastError, DuplicateError, ValidationError, ZodValidationError separately
 2. Custom AppError handler created
 3. Also created global error handler
-4. NotFoundRoute implemented
-5. For validating request created ValidateRequest.ts file
+4. JWT error handling
+5. NotFoundRoute implemented
+6. For validating request created ValidateRequest.ts file
 
 # Authentication and Authorization
 
