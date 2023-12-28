@@ -217,34 +217,245 @@
   }
   ```
 
-1. Endpoint: /api/courses  
+4.  Create a Course (Only Admin can do this)
+
+- Route: Endpoint: /api/courses
+- Method: POST
+- Request Headers:
+  ```
+  Authorization: <JWT_TOKEN>
+  ```
+- Request Body:
+  ```json
+  {
+    "title": "Introduction to Programming",
+    "instructor": "Ms. Sarah",
+    "categoryId": "658b5e53ff9d65b2db419d72",
+    "price": 49.99,
+    "tags": [
+      { "name": "Programming", "isDeleted": false },
+      { "name": "Python", "isDeleted": false }
+    ],
+    "startDate": "2023-08-15",
+    "endDate": "2023-12-15",
+    "language": "English",
+    "provider": "CodeMaster Institute",
+    "details": {
+      "level": "Beginner",
+      "description": "Start your programming journey with Python basics."
+    }
+  }
+  ```
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 201,
+    "message": "Course created successfully",
+    "data": {
+      "_id": "658cc7227a22766eeaf5bda7",
+      "title": "Introduction to Programming",
+      "instructor": "Ms. Sarah",
+      "categoryId": "658cc601a4f73a0262f7ac41",
+      "price": 49.99,
+      "tags": [
+        {
+          "name": "Programming",
+          "isDeleted": false
+        },
+        {
+          "name": "Python",
+          "isDeleted": false
+        }
+      ],
+      "startDate": "2023-08-15",
+      "endDate": "2023-12-15",
+      "language": "English",
+      "provider": "CodeMaster Institute",
+      "durationInWeeks": 18,
+      "details": {
+        "level": "Beginner",
+        "description": "Start your programming journey with Python basics."
+      },
+      "createdBy": "658cb0b62fdf243761f3cd2e",
+      "createdAt": "2023-12-28T00:53:54.907Z",
+      "updatedAt": "2023-12-28T00:53:54.907Z"
+    }
+  }
+  ```
+
+5.  Get Paginated and Filtered Courses.
+
+- Route: Endpoint: /api/courses
+- Method: GET
+
+  When interacting with the API, you can utilize the following query parameters to customize and filter the results according to your preferences.
+
+- page: (Optional) Specifies the page number for paginated results. Default is 1. Example: ?page=2
+
+- limit: (Optional) Sets the number of items per page. Default is a predefined limit. Example: ?limit=10
+
+- sortBy: (Optional) Specifies the field by which the results should be sorted. Only applicable to the following fields: title, price, startDate, endDate, language, durationInWeeks. Example: ?sortBy=startDate
+
+- sortOrder: (Optional) Determines the sorting order, either 'asc' (ascending) or 'desc' (descending). Example: ?sortOrder=desc
+
+- minPrice, maxPrice: (Optional) Filters results by a price range. Example: ?minPrice=20.00&maxPrice=50.00
+
+- tags: (Optional) Filters results by the name of a specific tag. Example: ?tags=Programming
+
+- startDate, endDate: (Optional) Filters results by a date range. Example: ?startDate=2023-01-01&endDate=2023-12-31
+
+- language: (Optional) Filters results by the language of the course. Example: ?language=English
+
+- provider: (Optional) Filters results by the course provider. Example: ?provider=Tech Academy
+
+- durationInWeeks: (Optional) Filters results by the duration of the course in weeks. Example: ?durationInWeeks=8
+
+- level: (Optional) Filters results by the difficulty level of the course. Example: ?level=Intermediate
+
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Courses retrieved successfully",
+    "meta": {
+      "page": 1,
+      "limit": 10,
+      "total": 6
+    },
+    "data": [
+      {
+        "_id": "658cc7227a22766eeaf5bda7",
+        "title": "Introduction to Programming",
+        "instructor": "Ms. Sarah",
+        "categoryId": "658cc601a4f73a0262f7ac41",
+        "price": 49.99,
+        "tags": [
+          {
+            "name": "Programming",
+            "isDeleted": false
+          },
+          {
+            "name": "Python",
+            "isDeleted": false
+          }
+        ],
+        "startDate": "2023-08-15",
+        "endDate": "2023-12-15",
+        "language": "English",
+        "provider": "CodeMaster Institute",
+        "durationInWeeks": 18,
+        "details": {
+          "level": "Beginner",
+          "description": "Start your programming journey with Python basics."
+        },
+        "createdBy": {
+          "_id": "658cb0b62fdf243761f3cd2e",
+          "username": "adminsakib",
+          "email": "adminsakib@ahmad.com",
+          "role": "admin"
+        },
+        "createdAt": "2023-12-28T00:53:54.907Z",
+        "updatedAt": "2023-12-28T00:53:54.907Z"
+      },
+      {
+        "_id": "658cc87e7a22766eeaf5bdaf",
+        "title": "Advanced Web Development",
+        "instructor": "Mr. Jason",
+        "categoryId": "658cc85d7a22766eeaf5bdac",
+        "price": 79.99,
+        "tags": [
+          {
+            "name": "Web Development",
+            "isDeleted": false
+          },
+          {
+            "name": "JavaScript",
+            "isDeleted": false
+          }
+        ],
+        "startDate": "2023-09-10",
+        "endDate": "2023-12-31",
+        "language": "English",
+        "provider": "WebMasters Academy",
+        "durationInWeeks": 16,
+        "details": {
+          "level": "Intermediate",
+          "description": "Explore advanced concepts in web development with a focus on JavaScript frameworks."
+        },
+        "createdBy": {
+          "_id": "658cb0b62fdf243761f3cd2e",
+          "username": "adminsakib",
+          "email": "adminsakib@ahmad.com",
+          "role": "admin"
+        },
+        "createdAt": "2023-12-28T00:59:42.964Z",
+        "updatedAt": "2023-12-28T00:59:42.964Z"
+      }
+      // ... other courses
+    ]
+  }
+  ```
+
+1.  Create a Category (Only Admin can do this)
+
+- Endpoint: /api/categories
+- Method: POST
+- Request Headers:
+  ```
+  Authorization: <JWT_TOKEN>
+  ```
+- Request Body:
+  ```json
+  {
+    "name": "Programming"
+  }
+  ```
+- Response:
+  ```json
+  {
+    "success": true,
+    "statusCode": 201,
+    "message": "Category created successfully",
+    "data": {
+      "_id": "658cc601a4f73a0262f7ac41",
+      "name": "Programming",
+      "createdBy": "658cb0b62fdf243761f3cd2e",
+      "createdAt": "2023-12-28T00:49:05.255Z",
+      "updatedAt": "2023-12-28T00:49:05.255Z"
+    }
+  }
+  ```
+
+4. Endpoint: /api/courses  
    Method: GET  
    Get Paginated and Filtered Courses by utilizing query parameters
-2. Endpoint: /api/categories  
+5. Endpoint: /api/categories  
    Method: POST  
    for creating a Category (only admin can do this)
-3. Endpoint: /api/categories  
+6. Endpoint: /api/categories  
    Method: GET  
    Get All Categories
-4. Endpoint: /api/reviews  
+7. Endpoint: /api/reviews  
    Method: POST  
    for creating a Review (only user can do this)
-5. Endpoint: /api/courses/:courseId  
+8. Endpoint: /api/courses/:courseId  
    Method: PUT  
    Update a Course (only admin can do this)
-6. Endpoint: /api/courses/:courseId/reviews  
+9. Endpoint: /api/courses/:courseId/reviews  
    Method: GET  
    Get Course by ID with Reviews
-7. Endpoint: /api/course/best  
-   Method: GET  
-   Get the Best Course Based on Average Review (Rating)
-8. Endpoint: /api/auth/register  
-   Method: POST  
-   User registration
-9. Route: /api/auth/login  
-   Method: POST  
-   User login
-10. Route: /api/auth/change-password  
+10. Endpoint: /api/course/best  
+    Method: GET  
+    Get the Best Course Based on Average Review (Rating)
+11. Endpoint: /api/auth/register  
+    Method: POST  
+    User registration
+12. Route: /api/auth/login  
+    Method: POST  
+    User login
+13. Route: /api/auth/change-password  
     Method: POST  
     change password
 
