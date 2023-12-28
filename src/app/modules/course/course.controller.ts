@@ -300,7 +300,7 @@ const getAllCourses = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     message: "Courses retrieved successfully",
     meta: metaData,
-    data: resultForResponse,
+    data: { courses: resultForResponse },
   });
 });
 export const courseControllers = {

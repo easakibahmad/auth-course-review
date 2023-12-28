@@ -324,77 +324,79 @@
       "limit": 10,
       "total": 6
     },
-    "data": [
-      {
-        "_id": "658cc7227a22766eeaf5bda7",
-        "title": "Introduction to Programming",
-        "instructor": "Ms. Sarah",
-        "categoryId": "658cc601a4f73a0262f7ac41",
-        "price": 49.99,
-        "tags": [
-          {
-            "name": "Programming",
-            "isDeleted": false
+    "data": {
+      "courses": [
+        {
+          "_id": "658cc7227a22766eeaf5bda7",
+          "title": "Introduction to Programming",
+          "instructor": "Ms. Sarah",
+          "categoryId": "658cc601a4f73a0262f7ac41",
+          "price": 49.99,
+          "tags": [
+            {
+              "name": "Programming",
+              "isDeleted": false
+            },
+            {
+              "name": "Python",
+              "isDeleted": false
+            }
+          ],
+          "startDate": "2023-08-15",
+          "endDate": "2023-12-15",
+          "language": "English",
+          "provider": "CodeMaster Institute",
+          "durationInWeeks": 18,
+          "details": {
+            "level": "Beginner",
+            "description": "Start your programming journey with Python basics."
           },
-          {
-            "name": "Python",
-            "isDeleted": false
-          }
-        ],
-        "startDate": "2023-08-15",
-        "endDate": "2023-12-15",
-        "language": "English",
-        "provider": "CodeMaster Institute",
-        "durationInWeeks": 18,
-        "details": {
-          "level": "Beginner",
-          "description": "Start your programming journey with Python basics."
-        },
-        "createdBy": {
-          "_id": "658cb0b62fdf243761f3cd2e",
-          "username": "adminsakib",
-          "email": "adminsakib@ahmad.com",
-          "role": "admin"
-        },
-        "createdAt": "2023-12-28T00:53:54.907Z",
-        "updatedAt": "2023-12-28T00:53:54.907Z"
-      },
-      {
-        "_id": "658cc87e7a22766eeaf5bdaf",
-        "title": "Advanced Web Development",
-        "instructor": "Mr. Jason",
-        "categoryId": "658cc85d7a22766eeaf5bdac",
-        "price": 79.99,
-        "tags": [
-          {
-            "name": "Web Development",
-            "isDeleted": false
+          "createdBy": {
+            "_id": "658cb0b62fdf243761f3cd2e",
+            "username": "adminsakib",
+            "email": "adminsakib@ahmad.com",
+            "role": "admin"
           },
-          {
-            "name": "JavaScript",
-            "isDeleted": false
-          }
-        ],
-        "startDate": "2023-09-10",
-        "endDate": "2023-12-31",
-        "language": "English",
-        "provider": "WebMasters Academy",
-        "durationInWeeks": 16,
-        "details": {
-          "level": "Intermediate",
-          "description": "Explore advanced concepts in web development with a focus on JavaScript frameworks."
+          "createdAt": "2023-12-28T00:53:54.907Z",
+          "updatedAt": "2023-12-28T00:53:54.907Z"
         },
-        "createdBy": {
-          "_id": "658cb0b62fdf243761f3cd2e",
-          "username": "adminsakib",
-          "email": "adminsakib@ahmad.com",
-          "role": "admin"
-        },
-        "createdAt": "2023-12-28T00:59:42.964Z",
-        "updatedAt": "2023-12-28T00:59:42.964Z"
-      }
-      // ... other courses
-    ]
+        {
+          "_id": "658cc87e7a22766eeaf5bdaf",
+          "title": "Advanced Web Development",
+          "instructor": "Mr. Jason",
+          "categoryId": "658cc85d7a22766eeaf5bdac",
+          "price": 79.99,
+          "tags": [
+            {
+              "name": "Web Development",
+              "isDeleted": false
+            },
+            {
+              "name": "JavaScript",
+              "isDeleted": false
+            }
+          ],
+          "startDate": "2023-09-10",
+          "endDate": "2023-12-31",
+          "language": "English",
+          "provider": "WebMasters Academy",
+          "durationInWeeks": 16,
+          "details": {
+            "level": "Intermediate",
+            "description": "Explore advanced concepts in web development with a focus on JavaScript frameworks."
+          },
+          "createdBy": {
+            "_id": "658cb0b62fdf243761f3cd2e",
+            "username": "adminsakib",
+            "email": "adminsakib@ahmad.com",
+            "role": "admin"
+          },
+          "createdAt": "2023-12-28T00:59:42.964Z",
+          "updatedAt": "2023-12-28T00:59:42.964Z"
+        }
+        // ... other courses
+      ]
+    }
   }
   ```
 
