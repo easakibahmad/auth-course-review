@@ -803,7 +803,8 @@
 # Authentication and Authorization
 
 Created auth.ts file for middleware support.  
-And implemented jwt authentication and authorization in this file
+And implemented jwt authentication and authorization in this file  
+implemented jwt token system to authenticate user
 
 # Utils
 
